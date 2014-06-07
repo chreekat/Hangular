@@ -80,3 +80,11 @@ Template
         - ng-controller
     - scope lenses
     - event sources
+
+
+Yesterday I saw some guy talking about making a wrapper for React.js. His
+language could be compiled to html or to js. I guess mine will do that,
+too. Whatever describes a directive will have both an Html representation
+and a a Js representation. The Js rep will include controllers, linkers,
+config, and relations between 3rd-party controllers. So maybe I can use it
+for that!
