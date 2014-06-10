@@ -88,3 +88,25 @@ too. Whatever describes a directive will have both an Html representation
 and a a Js representation. The Js rep will include controllers, linkers,
 config, and relations between 3rd-party controllers. So maybe I can use it
 for that!
+
+Gonna continue the description of directives. They produce two things, as
+mentioned, but not Html and JsRep: AngTemplate and JsRep. It's kinda funny
+because they will provide both requirements and fulfillments of those
+requirements, in terms of JS structure.
+
+Maybe JsStructure is a better name.
+
+Time to break out some terminology.
+
+data AngularTemplate / NgTemplate / AngTemplate / AngTmpl / NgTmpl / AngrTmpl
+-- product type with fields of:
+    Html
+    [ScopeRequirement]
+    [Interpolation]
+
+data ScopeRequirement = ModelReq String
+                      | CntlrReq String
+                      | ElemDirectiveReq String
+                      | AttrDirectiveReq String
+
+To be continued... first, I need to write an interesting web app.
