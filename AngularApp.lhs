@@ -109,4 +109,93 @@ data ScopeRequirement = ModelReq String
                       | ElemDirectiveReq String
                       | AttrDirectiveReq String
 
-To be continued... first, I need to write an interesting web app.
+To be continued... first, I need to write an interesting web app. The
+rationale for this is along the lines of "I have yet to see [I should
+really look harder] any Haskell/Angular integration that uses the truly
+great features of Angular. The reactive binding to the template is just
+scratching the surface. Defining directives and all they entail is
+significant and allows one to write declarative web apps much the way that
+Haskell allows one to write declarative ... anything. It feels very
+familiar to write some high-level "pseudocode" that ends up being REAL code
+by drilling down on the definitions.
+
+To demonstrate the similarities, and to provide a motivation for Hangular,
+I'll start with a "traditional" html/js Angular app. A real one. With
+nested directives, interconnected directives, compilers, linkers, and bears
+-- oh my!
+
+Oh shit, events. Keep track of which ones are available? Use warnings when
+events aren't exported or used.
+
+Will also need to talk about different types of composability. That's the
+whole point of the directive object: describing how to compose directives.
+Composition is heirarchical, since sibling directives have
+inter-dependencies as well as parent/child directives.
+
+Also regarding composability is preserving associability. If you 'combine'
+two directives, the result should be no different than writing a single
+directive. This means identical exposed scope objects, exposed events, and
+whatever else!
+
+An interesting problem: correctly sequencing actions when different
+templates can create scope changes that depend on each other. That needs an
+example. Here is the motivation:
+
+mainTemplate
+------------
+<foo-directive ng-click="tweakMyScope()"></foo-directive>
+
+fooTemplate
+-----------
+<span ng-click="tweakParentScope()"></span>
+
+Presumably these both run, but what is the order? I suppose you could make
+arguments in both directions. In short, this does not compose well, which
+makes me think it should be discouraged.
+
+~~~
+
+Just had an interesting problem with scope. A directive with a non-isolate
+scope clobbered the parent scope by doing "scope.m = ..." in its linker.
+
+
+~~~
+
+The problem of sequencing actions is solved by using data dependencies
+instead of action dependencies. In the example above, tweakParentScope
+should actually just tweak its own, child scope, and then any required
+changes in the parent scope should propagate from those changes. In other
+words, the parent scope needs a \$watch on the data the child action
+updates.
+
+A potential problem with this notion is the inefficiency of watching a huge
+structure when all we care about is one piece of that structure. I'd have
+to watch a group of watched collections. I could also create a view into
+the data though, and just watch the view. Not sure that's any better?
+Basically the same thing. Easier to implement, though. No. It's identical:
+Would need a zillion watches to build the view at the right times.
+
+The principle I'm trying to maintain is that the parent directive handles
+its own, global shit while the child directive doesn't need to care. This
+is a specific case of a more general principle that has a variety of names:
+separation of concerns. Maybe even purity. Independence and thus reuse.
+
+I'm also trying to avoid events. Ideally, changing a value *IS* the event.
+The programmer would benefit from not needing to remember to fire an event
+when a value changes; they could simply change the value.
+
+I can see a solution where the child directive changes its state and then
+fires an "I changed" event, which the parent then processes, but how nice
+would it be if the child directive merely changes its state and the parent
+is automatically updated? Or rather, the parent directive can choose to
+care or not care, precisely as if the child had also fired an event.
+
+~~~ 11-jun-14 12:00
+
+Up next: Specify game logic, including clicks, shift clicks, uncovering
+bombs, and so forth.
+
+~~~
+
+Something for the paper: Compare and contrast methods for communicating
+between directives. Attempt to unify as well.

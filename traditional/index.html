@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="fladdermus.js"></script>
+</head>
+<body ng-app="fladdermus" ng-controller="gameCtrlr" >
+  <h1>Fladdermusröj!</h1>
+
+  <div>
+    <score>[score]</score>
+    <smiley-face ng-click="resetGame()" pressed="{{m.pressed}}"></smiley-face>
+    <timer></timer>
+  </div>
+
+  <div ng-mousedown="m.pressed = true"
+       ng-mouseup="m.pressed = false">
+    <div ng-repeat="row in m.rows">
+      <board-cell ng-repeat="cell in row.cells">
+    </div>
+  </div>
+</body>
+</html>

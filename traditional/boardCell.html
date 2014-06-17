@@ -1,0 +1,5 @@
+<button ng-click="cell.covered = false">
+  <img ng-show="cell.covered" src="img/covered_tile.png">
+  <img ng-hide="cell.covered || cell.musen" ng-src="img/{{cell.numNeighbors}}.png">
+  <img ng-show="!cell.covered && cell.musen" src="img/sadbat.png">
+</button>
