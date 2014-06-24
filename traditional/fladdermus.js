@@ -1,5 +1,18 @@
 fladdermus = angular.module("fladdermus", []);
 
+fladdermus.directive('rightclick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.rightclick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+});
+
+
 fladdermus.directive("smileyFace", function() {
   return {
     restrict: "E",
@@ -32,6 +45,14 @@ fladdermus.directive('boardCell', function() {
   return {
     restrict: 'E',
     templateUrl: 'boardCell.html',
+    controller: function ($scope) {
+      $scope.cell.flag = 'none';
+      $scope.toggleflag = function () {
+        var flags = ['none', 'flag', 'question'];
+        var i = flags.indexOf($scope.cell.flag);
+        $scope.cell.flag = flags[(i+1) % 3];
+      };
+    },
   };
 });
 

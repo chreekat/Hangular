@@ -199,3 +199,22 @@ bombs, and so forth.
 
 Something for the paper: Compare and contrast methods for communicating
 between directives. Attempt to unify as well.
+
+~~~
+
+Sucks not having internet. I know I could easily figure out how to manage
+right-clicks in Angular on the internet, but I can't figure it out on my
+own...
+
+~~~ 23-jun 16:39
+
+Using right clicks means creating a directive ngContextmenu for contextmenu
+events.
+
+I want to spend today organizing some tasks so I can make constant progress
+for the next week. Have some goals.
+
+I remembered another way that UI components compose. The inputs they expose
+to the user add. This is important for making ui-generators (like VIS)
+possible. A component that exposes UI controls should expose the SAME
+control specification, regardless of how its subcomponents are arranged.
