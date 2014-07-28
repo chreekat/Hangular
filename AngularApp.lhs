@@ -218,3 +218,24 @@ I remembered another way that UI components compose. The inputs they expose
 to the user add. This is important for making ui-generators (like VIS)
 possible. A component that exposes UI controls should expose the SAME
 control specification, regardless of how its subcomponents are arranged.
+
+~~~ 25-jun 12:40
+
+At this point I'm kinda fed up with trying to make board-cell an
+independent directive. It has to communicate with the parent directive in
+ever more complicated ways. Is it not possible to make the delineation
+wherever the developer wants? Is there a skill involved in choosing the
+right amount of abstraction?
+
+I hope not, because my big goal is to take that first-pass, high-level
+sketch of the app, and then implement the app by filling in the pieces, not
+by keeping that sketch in my head while I write code that is designed for
+the fucking computer instead of the human.
+
+~~~ 26-jun 19:12
+
+Te answer is obvious: use data, not fucking signals. Duh? I was loathe to
+add more scope-property dependencies between boardCell and the outer
+controller, but that's actually just fine and really the way to go. Much
+better than overly-general "signals" that will only actually ever be used
+by one parent class.
