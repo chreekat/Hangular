@@ -239,3 +239,10 @@ add more scope-property dependencies between boardCell and the outer
 controller, but that's actually just fine and really the way to go. Much
 better than overly-general "signals" that will only actually ever be used
 by one parent class.
+
+~~~ 01-nov 22:49
+
+Now I added "gameStatus" and hooked it into a few things. There's stuff
+missing, though. I also added the bugs file. I converted spaces to tabs,
+which is probably a terrible idea. But the game seems much more playable
+now!

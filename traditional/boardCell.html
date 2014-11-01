@@ -1,5 +1,3 @@
 <button ng-click="uncover()" rightclick="toggleflag()">
-  <img ng-show="cell.covered" ng-src="img/covered_{{cell.flag}}.png">
-  <img ng-hide="cell.covered || cell.musen" ng-src="img/{{cell.numNeighbors}}.png">
-  <img ng-show="!cell.covered && cell.musen" ng-src="img/sadbat.png">
+	<img style="width: 50px" ng-src="{{imgSrc()}}">
 </button>
