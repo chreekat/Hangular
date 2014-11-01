@@ -79,6 +79,11 @@ fladdermus.directive('boardCell', function() {
 				var flags = ['none', 'flag', 'question'];
 				var i = flags.indexOf($scope.cell.flag);
 				$scope.cell.flag = flags[(i+1) % 3];
+				if (i === 0) {
+					$scope.m.flagged++;
+				} else if (i === 1) {
+					$scope.m.flagged--;
+				}
 			};
 			$scope.uncover = function () {
 				$scope.cell.covered = false;
@@ -115,12 +120,8 @@ fladdermus.directive('boardCell', function() {
 				} else {
 					src = c.numNeighbors;
 				}
-
 				return "img/" + src + ".png";
-				//<img ng-show="cell.covered" ng-src="img/covered_{{cell.flag}}.png">
-				//<img ng-hide="cell.covered || cell.musen" ng-src="img/{{cell.numNeighbors}}.png">
-				//<img ng-show="!cell.covered && cell.musen" ng-src="img/sadbat.png">
-            };
+			};
 		},
 	};
 });
@@ -133,11 +134,13 @@ fladdermus.controller('gameCtrlr', function($scope) {
 		width: 9,
 		height: 9,
 		numMice: 10,
+		flagged: 0,
 	};
 	$scope.m.rows = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
 	$scope.resetGame = function () {
 		$scope.m.gameStatus = "playing";
 		$scope.m.rows = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+		$scope.m.flagged = 0;
 		$scope.$broadcast('timer-reset');
 	};
 });

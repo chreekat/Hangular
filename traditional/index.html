@@ -10,7 +10,7 @@
 	<h1>Fladdermusröj!</h1>
 
 	<div>
-		<score>[score]</score>
+		<score>{{m.numMice - m.flagged}}</score>
 		<smiley-face ng-click="resetGame()" pressed="{{m.pressed}}"
 		game-status="{{m.gameStatus}}"></smiley-face>
 		<timer></timer>
