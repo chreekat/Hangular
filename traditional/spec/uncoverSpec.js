@@ -1,18 +1,22 @@
-describe("decomposeBoard", function () {
-    it("makes the right targets", function () {
-        rows = genGameBoard(9,9,10);
-        targetBoard =  { rows: rows, target: rows[3].cells[2], width: 9, height: 9 };
-        x = decomposeBoard(targetBoard);
-        posns = x.map(function (tb) { return tb.target.position });
-        expect(posns).toEqual([
-            [2, 2],
-            [2, 3],
-            [3, 3],
-            [4, 3],
-            [4, 2],
-            [4, 1],
-            [3, 1],
-            [2, 1]
-            ]);
+describe("uncoverCascadeNeighbors", function () {
+    describe("does corners", function () {
+        var rows = genGameBoard(2,2,1);
+        var targetBoard =  { rows: rows, width: 2, height: 2 };
+        it("00", function () {
+            targetBoard.target = targetBoard.rows[0].cells[0];
+            expect(uncoverCascadeNeighbors(targetBoard).length).toEqual(3);
+        });
+        it("01", function () {
+            targetBoard.target = targetBoard.rows[0].cells[1];
+            expect(uncoverCascadeNeighbors(targetBoard).length).toEqual(3);
+        });
+        it("10", function () {
+            targetBoard.target = targetBoard.rows[1].cells[0];
+            expect(uncoverCascadeNeighbors(targetBoard).length).toEqual(3);
+        });
+        it("11", function () {
+            targetBoard.target = targetBoard.rows[1].cells[1];
+            expect(uncoverCascadeNeighbors(targetBoard).length).toEqual(3);
+        });
     });
 });
