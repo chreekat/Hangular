@@ -23,7 +23,7 @@ fladdermus.directive("smileyFace", function() {
         },
         controller: function ($scope) {
             $scope.imgSrc = function () {
-                src = "";
+                var src = "";
                 if ($scope.gameStatus === "playing") {
                     if ($scope.pressed === "true") {
                         src = "uhohface";
@@ -89,11 +89,12 @@ fladdermus.directive('boardCell', function() {
                 if ($scope.cell.musen) {
                     $scope.m.gameStatus = "lost";
                 } else {
-                    uncovered = uncoverCascade("All",
-                            { target: $scope.cell,
-                              rows: $scope.m.rows,
-                              height: $scope.m.height,
-                              width: $scope.m.width });
+                    uncovered = uncoverCascade({
+                        target: $scope.cell,
+                        rows: $scope.m.rows,
+                        height: $scope.m.height,
+                        width: $scope.m.width
+                    });
                     $scope.m.uncoveredCells += uncovered;
                     if ($scope.width * $scope.height ==
                             $scope.uncoveredCells + $scope.numMice) {
@@ -102,9 +103,9 @@ fladdermus.directive('boardCell', function() {
                 }
             };
             $scope.imgSrc = function () {
-                src = "";
-                c = $scope.cell;
-                stat = $scope.m.gameStatus;
+                var src = "";
+                var c = $scope.cell;
+                var stat = $scope.m.gameStatus;
                 if (stat === "playing") {
                     if (c.covered) {
                         src = "covered_" + c.flag;

@@ -3,7 +3,7 @@ div = function(a, b) {
 };
 
 divMod = function(n, d) {
-    divisor = div(n, d);
-    mod = n - (d * divisor);
+    var divisor = div(n, d);
+    var mod = n - (d * divisor);
     return [divisor, mod];
 };

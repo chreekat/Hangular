@@ -2,8 +2,8 @@ genGameBoard = function (h, w, numMus) {
     if (numMus > h*w) {
         throw("Impossible game board: more mus than tiles!");
     }
-    cells = [];
-    maxLoc = h * w;
+    var cells = [];
+    var maxLoc = h * w;
     for (i = 0; i < maxLoc; i++) {
         cells[i] = {
             covered: true,
@@ -45,7 +45,7 @@ genGameBoard = function (h, w, numMus) {
         }
     }
 
-    rows = [];
+    var rows = [];
     for (i = 0; i < h; i++) {
         rows[i] = { cells: cells.slice(i*w, i*w+w) };
     }

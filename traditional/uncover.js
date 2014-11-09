@@ -1,4 +1,4 @@
-directions =
+var directions =
     [ "N"
     , "NE"
     , "E"
@@ -27,28 +27,28 @@ mkBoard = function (rows, height, width) {
 };
 // breaks a targeted board into a bunch of tinier targeted boards.
 decomposeBoard = function (targetBoard) {
-    rowT = targetBoard.target.position[0];
-    colT = targetBoard.target.position[1];
+    var rowT = targetBoard.target.position[0];
+    var colT = targetBoard.target.position[1];
     // zero position
-    rowZ = targetBoard.rows[0].cells[0].position[0];
-    colZ = targetBoard.rows[0].cells[0].position[1];
+    var rowZ = targetBoard.rows[0].cells[0].position[0];
+    var colZ = targetBoard.rows[0].cells[0].position[1];
 
-    above = rowT - rowZ;
-    below = targetBoard.height - (rowT - rowZ) - 1;
-    left = colT - colZ;
-    right = targetBoard.width - (colT - colZ) - 1;
+    var above = rowT - rowZ;
+    var below = targetBoard.height - (rowT - rowZ) - 1;
+    var left = colT - colZ;
+    var right = targetBoard.width - (colT - colZ) - 1;
 
     // N: the column of cells above the target.
-    delN = [];
+    var delN = [];
     for (i = 0; i < above; i++) {
         delN.push({cells: [targetBoard.rows[i].cells[colT - colZ]]});
     }
-    boardN = mkBoard(delN, above, 1);
+    var boardN = mkBoard(delN, above, 1);
     if (above > 0) {
         boardN.target = delN[above - 1].cells[0];
     };
     // NE: the matrix ne of the target.
-    delNE = [];
+    var delNE = [];
     if (right > 0) {
         start = colT - colZ + 1;
         for (i = 0; i < above; i++) {
@@ -56,24 +56,24 @@ decomposeBoard = function (targetBoard) {
             delNE.push({cells: cells});
         }
     }
-    boardNE = mkBoard(delNE, above, right);
+    var boardNE = mkBoard(delNE, above, right);
     if (above > 0 && right > 0) {
         boardNE.target = delNE[above - 1].cells[0];
     }
     // E: the row of cells to the right of the target.
-    delE = [];
+    var delE = [];
     if (right > 0) {
         start = colT - colZ + 1;
         delE = [{
             cells: targetBoard.rows[rowT-rowZ].cells.slice(start, start+right)
         }];
     }
-    boardE = mkBoard(delE, 1, right);
+    var boardE = mkBoard(delE, 1, right);
     if (right > 0) {
         boardE.target = delE[0].cells[0];
     }
     // SE: the matrix se of the target.
-    delSE = [];
+    var delSE = [];
     if (right > 0) {
         start = colT - colZ + 1;
         for (i = 0; i < below; i++) {
@@ -84,23 +84,23 @@ decomposeBoard = function (targetBoard) {
             delSE.push({cells: cells});
         }
     }
-    boardSE = mkBoard(delSE, below, right);
+    var boardSE = mkBoard(delSE, below, right);
     if (right > 0 && below > 0) {
         boardSE.target = delSE[0].cells[0];
     }
     // S: the column of cells below the target.
-    delS = [];
+    var delS = [];
     for (i = 0; i < below; i++) {
         delS.push({cells: [targetBoard
             .rows[rowT - rowZ + i + 1]
             .cells[colT - colZ]]});
     }
-    boardS = mkBoard(delS, below, 1);
+    var boardS = mkBoard(delS, below, 1);
     if (below > 0) {
         boardS.target = delS[0].cells[0];
     }
     // SW: the matrix sw of the target.
-    delSW = [];
+    var delSW = [];
     if (left > 0) {
         end = colT - colZ;
         for (i = 0; i < below; i++) {
@@ -111,24 +111,24 @@ decomposeBoard = function (targetBoard) {
             delSW.push({cells: cells});
         }
     }
-    boardSW = mkBoard(delSW, below, left);
+    var boardSW = mkBoard(delSW, below, left);
     if (below > 0 && left > 0) {
         boardSW.target = delSW[0].cells[left - 1];
     }
     // W: the row of cells to the left of the target.
-    delW = [];
+    var delW = [];
     if (left > 0) {
         end = colT - colZ;
         delW = [{
             cells: targetBoard.rows[rowT - rowZ].cells.slice(0, end)
         }];
     }
-    boardW = mkBoard(delW, 1, left);
+    var boardW = mkBoard(delW, 1, left);
     if (left > 0) {
         boardW.target = delW[0].cells[left - 1];
     }
     // NW: the matrix of cells nw of the target.
-    delNW = [];
+    var delNW = [];
     if (left > 0) {
         end = colT - colZ;
         for (i = 0; i < above; i++) {
@@ -136,7 +136,7 @@ decomposeBoard = function (targetBoard) {
             delNW.push({cells: cells});
         }
     }
-    boardNW = mkBoard(delNW, above, left);
+    var boardNW = mkBoard(delNW, above, left);
     if (above > 0 && left > 0) {
         boardNW.target = delNW[above - 1].cells[left - 1];
     }
@@ -147,22 +147,24 @@ decomposeBoard = function (targetBoard) {
 /* Modifies board in place. Returns number of uncovered cells. */
 uncoverCascade = function (direction, targetedBoard) {
 
+    var numUncovered = 0;
+
     // Board boundary condition
     if (targetedBoard.target === null) {
-        return 0;
+        return numUncovered;
     }
 
     targetedBoard.target.covered = false;
     numUncovered = 1;
 
-    // End condition of the cascade
+    // Empty-area boundary condition
     if (targetedBoard.target.numNeighbors !== 0) {
         return numUncovered;
     }
 
-    segments = decomposeBoard(targetedBoard);
-    interestingDirections = [];
-    interestingSegments = [];
+    var segments = decomposeBoard(targetedBoard);
+    var interestingDirections = [];
+    var interestingSegments = [];
     switch (direction) {
         case "All":
             interestingDirections = directions;
@@ -178,30 +180,30 @@ uncoverCascade = function (direction, targetedBoard) {
             break;
         case "E":
             interestingDirections = ["E"];
-            interestingSegments = segments.slice(2,1);
+            interestingSegments = segments.slice(2,3);
             break;
         case "SE":
             interestingDirections = ["E", "SE", "S"];
-            interestingSegments = segments.slice(2,3);
+            interestingSegments = segments.slice(2,5);
             break;
         case "S":
             interestingDirections = ["S"];
-            interestingSegments = segments.slice(4,1);
+            interestingSegments = segments.slice(4,5);
             break;
         case "SW":
             interestingDirections = ["S", "SW", "W"];
-            interestingSegments = segments.slice(4,3);
+            interestingSegments = segments.slice(4,7);
             break;
         case "W":
             interestingDirections = ["W"];
-            interestingSegments = segments.slice(6,1);
+            interestingSegments = segments.slice(6,7);
             break;
         case "NW":
             interestingDirections = ["W", "NW", "N"];
-            interestingSegments = segments.slice(6,2).concat([segments[0]]);
+            interestingSegments = segments.slice(6,8).concat([segments[0]]);
             break;
     }
-    results = zip(uncoverCascade, interestingDirections, interestingSegments);
-    numUncovered += results.reduce(function(a,b) { return a + b });
+    var results = zip(uncoverCascade, interestingDirections, interestingSegments);
+    numUncovered += results.reduce(function(a,b) { return a + b }, 0);
     return numUncovered;
 };
