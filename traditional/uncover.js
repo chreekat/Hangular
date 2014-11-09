@@ -17,6 +17,14 @@ zip = function (fn, as, bs) {
     return ret;
 };
 
+mkBoard = function (rows, height, width) {
+    return {
+        rows: rows,
+        height: height,
+        width: width,
+        target: null
+    };
+};
 // breaks a targeted board into a bunch of tinier targeted boards.
 decomposeBoard = function (targetBoard) {
     rowT = targetBoard.target.position[0];
@@ -35,12 +43,7 @@ decomposeBoard = function (targetBoard) {
     for (i = 0; i < above; i++) {
         delN.push({cells: [targetBoard.rows[i].cells[colT - colZ]]});
     }
-    boardN = {
-        rows: delN,
-        height: above,
-        width: 1,
-        target: null,
-    };
+    boardN = mkBoard(delN, above, 1);
     if (above > 0) {
         boardN.target = delN[above - 1].cells[0];
     };
@@ -53,12 +56,7 @@ decomposeBoard = function (targetBoard) {
             delNE.push({cells: cells});
         }
     }
-    boardNE = {
-        rows: delNE,
-        height: above,
-        width: right,
-        target: null,
-    };
+    boardNE = mkBoard(delNE, above, right);
     if (above > 0 && right > 0) {
         boardNE.target = delNE[above - 1].cells[0];
     }
@@ -70,12 +68,7 @@ decomposeBoard = function (targetBoard) {
             cells: targetBoard.rows[rowT-rowZ].cells.slice(start, start+right)
         }];
     }
-    boardE = {
-        rows: delE,
-        height: 1,
-        width: right,
-        target: null,
-    };
+    boardE = mkBoard(delE, 1, right);
     if (right > 0) {
         boardE.target = delE[0].cells[0];
     }
@@ -91,12 +84,7 @@ decomposeBoard = function (targetBoard) {
             delSE.push({cells: cells});
         }
     }
-    boardSE = {
-        rows: delSE,
-        height: below,
-        width: right,
-        target: null,
-    };
+    boardSE = mkBoard(delSE, below, right);
     if (right > 0 && below > 0) {
         boardSE.target = delSE[0].cells[0];
     }
@@ -107,12 +95,7 @@ decomposeBoard = function (targetBoard) {
             .rows[rowT - rowZ + i + 1]
             .cells[colT - colZ]]});
     }
-    boardS = {
-        rows: delS,
-        height: below,
-        width: 1,
-        target: null,
-    };
+    boardS = mkBoard(delS, below, 1);
     if (below > 0) {
         boardS.target = delS[0].cells[0];
     }
@@ -128,12 +111,7 @@ decomposeBoard = function (targetBoard) {
             delSW.push({cells: cells});
         }
     }
-    boardSW = {
-        rows: delSW,
-        height: below,
-        width: left,
-        target: null,
-    };
+    boardSW = mkBoard(delSW, below, left);
     if (below > 0 && left > 0) {
         boardSW.target = delSW[0].cells[left - 1];
     }
@@ -145,12 +123,7 @@ decomposeBoard = function (targetBoard) {
             cells: targetBoard.rows[rowT - rowZ].cells.slice(0, end)
         }];
     }
-    boardW = {
-        rows: delW,
-        height: 1,
-        width: left,
-        target: null,
-    };
+    boardW = mkBoard(delW, 1, left);
     if (left > 0) {
         boardW.target = delW[0].cells[left - 1];
     }
@@ -163,12 +136,7 @@ decomposeBoard = function (targetBoard) {
             delNW.push({cells: cells});
         }
     }
-    boardNW = {
-        rows: delNW,
-        height: above,
-        width: left,
-        target: null,
-    };
+    boardNW = mkBoard(delNW, above, left);
     if (above > 0 && left > 0) {
         boardNW.target = delNW[above - 1].cells[left - 1];
     }
