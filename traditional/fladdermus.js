@@ -96,8 +96,8 @@ fladdermus.directive('boardCell', function() {
                         width: $scope.m.width
                     });
                     $scope.m.uncoveredCells += uncovered;
-                    if ($scope.width * $scope.height ==
-                            $scope.uncoveredCells + $scope.numMice) {
+                    if ($scope.m.width * $scope.m.height ==
+                            $scope.m.uncoveredCells + $scope.m.numMice) {
                         $scope.m.gameStatus = "won";
                     }
                 }
@@ -146,6 +146,7 @@ fladdermus.controller('gameCtrlr', function($scope) {
         $scope.m.gameStatus = "playing";
         $scope.m.rows = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
         $scope.m.flagged = 0;
+        $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');
     };
 });
