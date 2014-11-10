@@ -102,28 +102,52 @@ fladdermus.directive('boardCell', function() {
                     }
                 }
             };
+            // Hardest part of this entire game. I'd draw a chart, but
+            // maybe I'll just take a picture of my notebook and throw it
+            // in the repo instead. Let me just get my camera....
             $scope.imgSrc = function () {
                 var src = "";
                 var c = $scope.cell;
+                var cover = "covered_" + c.flag;
                 var stat = $scope.m.gameStatus;
-                if (stat === "playing") {
-                    if (c.covered) {
-                        src = "covered_" + c.flag;
-                    } else {
-                        if (! c.musen) {
-                            src = c.numNeighbors;
-                        } else {
-                            src = "sadbat";
+                // The one case that has the easiest test.
+                src = c.numNeighbors;
+                // All other cases fall under this blanket:
+                if (c.covered || c.musen) {
+                    // c.musen is the next big divisor.
+                    if (c.musen) {
+                        switch (stat) {
+                            case "playing":
+                                src = cover;
+                                break;
+                            case "lost":
+                                if (c.flag === "flag") {
+                                    src = cover;
+                                } else {
+                                    src = "sadbat";
+                                }
+                                break;
+                            case "won":
+                                src = "happybat";
+                                break;
+                        }
+                    } else { // all that's left: (! c.covered && ! c.musen)
+                        switch (stat) {
+                            case "playing":
+                                src = cover;
+                                break;
+                            case "lost":
+                                if (c.flag === "flag")  {
+                                    src = "badFlag";
+                                } else {
+                                    src = cover;
+                                }
+                                break;
+                            case "won":
+                                src = c.numNeighbors;
+                                break;
                         }
                     }
-                } else if (c.musen) { // game over
-                    if (stat === "lost") {
-                        src = "sadbat";
-                    } else {
-                        src = "happybat";
-                    }
-                } else {
-                    src = c.numNeighbors;
                 }
                 return "img/" + src + ".png";
             };
