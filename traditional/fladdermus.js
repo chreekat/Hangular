@@ -1,5 +1,18 @@
 fladdermus = angular.module("fladdermus", []);
 
+fladdermus.directive('leftmouseup', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.leftmouseup);
+        element.bind('mouseup', function(event) {
+            if (event.button === 0) {
+                scope.$apply(function () {
+                    event.preventDefault();
+                    fn(scope, {$event:event});
+                });
+            }
+        });
+    };
+});
 fladdermus.directive('rightclick', function($parse) {
     return function(scope, element, attrs) {
         var fn = $parse(attrs.rightclick);
