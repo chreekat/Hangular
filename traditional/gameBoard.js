@@ -29,19 +29,12 @@ genGameBoard = function (h, w, numMus) {
         }
     };
 
-    // I'm told this is the original logic
-    for(i = 0; i < numMus; i++) {
+    var n = 0;
+    while (n < numMus) {
         loc = Math.floor(Math.random() * maxLoc);
         if (! cells[loc].musen) {
             set(loc);
-        }
-        else {
-            for (j = 0; j < maxLoc; j++) {
-                if (! cells[j].musen) {
-                    set(j);
-                    break;
-                }
-            }
+            n++;
         }
     }
 
