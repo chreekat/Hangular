@@ -78,6 +78,9 @@ fladdermus.directive("timer", function($interval) {
                 scope.m.time = 0;
                 startTimer();
             });
+            scope.$on('game-over', function () {
+                $interval.cancel(p);
+            });
         },
     };
 });
@@ -102,11 +105,12 @@ fladdermus.directive('boardCell', function() {
                 }
             };
             $scope.uncover = function () {
-                if ($scope.m.gameStatus !== "playing") {
+                if ($scope.m.gameStatus !== "playing"
+                        || $scope.cell.flag === "flag") {
                     return;
                 }
                 if ($scope.cell.musen) {
-                    $scope.m.gameStatus = "lost";
+                    $scope.gameOver(false);
                 } else {
                     uncovered = uncoverCascade({
                         target: $scope.cell,
@@ -117,7 +121,7 @@ fladdermus.directive('boardCell', function() {
                     $scope.m.uncoveredCells += uncovered;
                     if ($scope.m.width * $scope.m.height ==
                             $scope.m.uncoveredCells + $scope.m.numMice) {
-                        $scope.m.gameStatus = "won";
+                        $scope.gameOver(true);
                     }
                 }
             };
@@ -191,5 +195,13 @@ fladdermus.controller('gameCtrlr', function($scope) {
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');
+    };
+    $scope.gameOver = function(won) {
+        $scope.$broadcast('game-over');
+        if (won) {
+            $scope.m.gameStatus = "won";
+        } else {
+            $scope.m.gameStatus = "lost";
+        }
     };
 });
