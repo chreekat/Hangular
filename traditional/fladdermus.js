@@ -76,6 +76,9 @@ fladdermus.directive('boardCell', function() {
         controller: function ($scope) {
             $scope.cell.flag = 'none';
             $scope.toggleflag = function () {
+                if ($scope.m.gameStatus !== "playing") {
+                    return;
+                }
                 var flags = ['none', 'flag', 'question'];
                 var i = flags.indexOf($scope.cell.flag);
                 $scope.cell.flag = flags[(i+1) % 3];
@@ -86,6 +89,9 @@ fladdermus.directive('boardCell', function() {
                 }
             };
             $scope.uncover = function () {
+                if ($scope.m.gameStatus !== "playing") {
+                    return;
+                }
                 if ($scope.cell.musen) {
                     $scope.m.gameStatus = "lost";
                 } else {
