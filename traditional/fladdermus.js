@@ -107,12 +107,16 @@ fladdermus.directive('boardCell', function() {
             };
             $scope.uncover = function () {
                 if ($scope.m.gameStatus !== "playing"
-                        || $scope.cell.flag === "flag") {
+                        || $scope.cell.flag === "flag"
+                        || $scope.cell.covered == false) {
                     return;
                 }
-                if ($scope.cell.musen) {
+                if ($scope.cell.musen && $scope.m.uncoveredCells > 0) {
                     $scope.gameOver(false);
                 } else {
+                    if ($scope.cell.musen) {
+                        hideMouse($scope.m.gameBoard, $scope.cell);
+                    }
                     uncovered = uncoverCascade({
                         target: $scope.cell,
                         gameBoard: $scope.m.gameBoard,
