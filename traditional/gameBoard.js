@@ -1,51 +1,57 @@
-genGameBoard = function (h, w, numMus) {
-    if (numMus > h*w) {
-        throw("Impossible game board: more mus than tiles!");
-    }
-    var cells = [];
-    var maxLoc = h * w;
-    for (i = 0; i < maxLoc; i++) {
-        cells[i] = {
-            covered: true,
-            numNeighbors: 0,
-            musen: false,
-            position: divMod(i, w),
-        };
-    }
-
-    set = function (loc) {
-        cells[loc].musen = true;
+GameBoard = (function () {
+    set = function (gameBoard, loc) {
+        var x = loc[0], y = loc[1];
+        gameBoard.rows[x].cells[y].musen = true;
         // left-right and up-down
         for (lr = -1; lr < 2; lr++) {
             for (ud = -1; ud < 2; ud++) {
-                neighbor = loc + w*ud + lr;
                 if ((lr != 0 || ud != 0)  // don't process ourself
-                        && (div(loc, w) == div(loc+lr, w)) // don't wrap around
-                        && ((neighbor >= 0 && neighbor < maxLoc)))    // don't fall off board
+                        && (ud + x >= 0 && ud + x < gameBoard.height)
+                        && (lr + y >= 0 && lr + y < gameBoard.width))
                 {
-                    cells[neighbor].numNeighbors++;
+                    gameBoard.rows[ud + x].cells[lr + y].numNeighbors++;
                 }
             }
         }
     };
 
-    var n = 0;
-    while (n < numMus) {
-        loc = Math.floor(Math.random() * maxLoc);
-        if (! cells[loc].musen) {
-            set(loc);
-            n++;
+    genGameBoard = function (h, w, numMus) {
+        if (numMus > h*w) {
+            throw("Impossible game board: more mus than tiles!");
         }
-    }
+        var gameBoard = {
+            rows: [],
+            height: h,
+            width: w,
+        };
+        var maxLoc = h * w;
+        for (i = 0; i < h; i++) {
+            var row = [];
+            for (j = 0; j < w; j++) {
+                row.push({
+                    covered: true,
+                    numNeighbors: 0,
+                    musen: false,
+                    position: [i,j],
+                });
+            }
+            gameBoard.rows.push({cells: row});
+        }
 
-    var rows = [];
-    for (i = 0; i < h; i++) {
-        rows[i] = { cells: cells.slice(i*w, i*w+w) };
-    }
+        var n = 0;
+        while (n < numMus) {
+            loc = divMod(Math.floor(Math.random() * maxLoc), w);
+            if (! gameBoard.rows[loc[0]].cells[loc[1]].musen) {
+                set(gameBoard, loc);
+                n++;
+            }
+        }
+
+        return gameBoard;
+    };
 
     return {
-        rows: rows,
-        width: w,
-        height: h
+        genGameBoard: genGameBoard,
     };
-};
+
+}());

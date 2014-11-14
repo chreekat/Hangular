@@ -289,3 +289,12 @@ Adding "gameState.js" which is just comments:
 // cascade needs to stop if a mus is uncovered. So, it has to run FIFO.
 //
 // Same goes for creating a new board game.
+
+~~~ 14-nov 22:30
+
+Well I just tried to read Angular docs and failed. Too stupid. I wanted to
+just write a module that encapsulates some of the gameboard manipulation
+functions, but christ. I'll just make some global functions instead.
+
+Working with Haskell modules, despite whatever flaws they may have, has
+spoiled me rotten.

@@ -187,10 +187,10 @@ fladdermus.controller('gameCtrlr', function($scope) {
         numMice: 10,
         flagged: 0,
     };
-    $scope.m.gameBoard = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+    $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
-        $scope.m.gameBoard = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+        $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');
