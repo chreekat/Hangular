@@ -246,3 +246,16 @@ Now I added "gameStatus" and hooked it into a few things. There's stuff
 missing, though. I also added the bugs file. I converted spaces to tabs,
 which is probably a terrible idea. But the game seems much more playable
 now!
+
+~~~ 14-nov 15:40
+
+Things have gone very well. The game is quite playable. There's a lot left
+to do, however: pre-game and post-game controls including high scores and
+board size controls.
+
+I was just about to create the function that moves a bat if it is on the
+first square a player clicks on (so one can't lose on the first turn), and
+I realized that a table should always include its height and width. A
+single object should encapsulate all of that. So now, of course, I need to
+refactor a bunch of code -- and I'm sure I'll break something! Javascript
+strikes!!
