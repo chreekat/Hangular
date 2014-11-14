@@ -155,7 +155,7 @@ fladdermus.directive('boardCell', function() {
                                 src = "happybat";
                                 break;
                         }
-                    } else { // all that's left: (! c.covered && ! c.musen)
+                    } else { // all that's left: (c.covered && ! c.musen)
                         switch (stat) {
                             case "playing":
                                 src = cover;
@@ -201,6 +201,7 @@ fladdermus.controller('gameCtrlr', function($scope) {
         $scope.$broadcast('game-over');
         if (won) {
             $scope.m.gameStatus = "won";
+            $scope.m.flagged = $scope.m.numMice;
         } else {
             $scope.m.gameStatus = "lost";
         }
