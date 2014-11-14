@@ -92,7 +92,8 @@ fladdermus.directive('boardCell', function() {
         controller: function ($scope) {
             $scope.cell.flag = 'none';
             $scope.toggleflag = function () {
-                if ($scope.m.gameStatus !== "playing") {
+                if ($scope.m.gameStatus !== "playing"
+                        || ! $scope.cell.covered) {
                     return;
                 }
                 var flags = ['none', 'flag', 'question'];
