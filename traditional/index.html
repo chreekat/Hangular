@@ -12,18 +12,22 @@
 <body ng-app="fladdermus" ng-controller="gameCtrlr" >
 	<h1>Fladdermusröj!</h1>
 
-	<div>
-		<score>{{m.numMice - m.flagged}}</score>
-		<smiley-face ng-click="resetGame()" pressed="{{m.pressed}}"
-		game-status="{{m.gameStatus}}"></smiley-face>
-		<timer></timer>
-	</div>
+        <div style="max-width: 40em; margin: auto;">
+            <div style="float: left;">
+                <div>
+                        <score>{{m.numMice - m.flagged}}</score>
+                        <smiley-face ng-click="resetGame()" pressed="{{m.pressed}}"
+                        game-status="{{m.gameStatus}}"></smiley-face>
+                        <timer></timer>
+                </div>
 
-	<div ng-mousedown="m.pressed = true"
-			 ng-mouseup="m.pressed = false">
-		<div ng-repeat="row in m.rows">
-			<board-cell gameStatus="gameStatus" ng-repeat="cell in row.cells">
-		</div>
-	</div>
+                <div ng-mousedown="m.pressed = true" style="font-size: 0; border: 1px solid #030303"
+                                 ng-mouseup="m.pressed = false">
+                        <div ng-repeat="row in m.rows">
+                                <board-cell gameStatus="gameStatus" ng-repeat="cell in row.cells">
+                        </div>
+                </div>
+            </div>
+        </div>
 </body>
 </html>
