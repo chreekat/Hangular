@@ -19,7 +19,7 @@ zip = function (fn, as, bs) {
 
 mkMkBoard = function (targetBoard) {
     var Board = function (row, col) {
-        this.target = targetBoard.rows[row].cells[col];
+        this.target = targetBoard.gameBoard.rows[row].cells[col];
     };
     Board.prototype = Object.create(targetBoard);
 
@@ -40,22 +40,22 @@ uncoverCascadeNeighbors = function (targetBoard) {
             neighbors.push(mkBoard(row - 1, col - 1));
         }
         neighbors.push(mkBoard(row - 1, col));
-        if (col < targetBoard.width - 1) {
+        if (col < targetBoard.gameBoard.width - 1) {
             neighbors.push(mkBoard(row - 1, col + 1));
         }
     }
     if (col > 0) {
         neighbors.push(mkBoard(row, col - 1));
     }
-    if (col < targetBoard.width - 1) {
+    if (col < targetBoard.gameBoard.width - 1) {
         neighbors.push(mkBoard(row, col + 1));
     }
-    if (row < targetBoard.height - 1) {
+    if (row < targetBoard.gameBoard.height - 1) {
         if (col > 0) {
             neighbors.push(mkBoard(row + 1, col - 1));
         }
         neighbors.push(mkBoard(row + 1, col));
-        if (col < targetBoard.width - 1) {
+        if (col < targetBoard.gameBoard.width - 1) {
             neighbors.push(mkBoard(row + 1, col + 1));
         }
     }

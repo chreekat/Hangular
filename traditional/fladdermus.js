@@ -115,9 +115,7 @@ fladdermus.directive('boardCell', function() {
                 } else {
                     uncovered = uncoverCascade({
                         target: $scope.cell,
-                        rows: $scope.m.rows,
-                        height: $scope.m.height,
-                        width: $scope.m.width
+                        gameBoard: $scope.m.gameBoard,
                     });
                     $scope.m.uncoveredCells += uncovered;
                     if ($scope.m.width * $scope.m.height ==
@@ -181,7 +179,7 @@ fladdermus.directive('boardCell', function() {
 
 fladdermus.controller('gameCtrlr', function($scope) {
     $scope.m = {
-        rows: [],
+        gameBoard: null,
         gameStatus: "playing",
         uncoveredCells: 0,
         width: 9,
@@ -189,10 +187,10 @@ fladdermus.controller('gameCtrlr', function($scope) {
         numMice: 10,
         flagged: 0,
     };
-    $scope.m.rows = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+    $scope.m.gameBoard = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
-        $scope.m.rows = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+        $scope.m.gameBoard = genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');

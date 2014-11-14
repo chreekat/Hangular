@@ -42,5 +42,10 @@ genGameBoard = function (h, w, numMus) {
     for (i = 0; i < h; i++) {
         rows[i] = { cells: cells.slice(i*w, i*w+w) };
     }
-    return rows;
+
+    return {
+        rows: rows,
+        width: w,
+        height: h
+    };
 };

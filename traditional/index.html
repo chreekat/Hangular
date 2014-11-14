@@ -23,7 +23,7 @@
 
                 <div ng-mousedown="m.pressed = true" style="font-size: 0; border: 1px solid #030303"
                                  ng-mouseup="m.pressed = false">
-                        <div ng-repeat="row in m.rows">
+                        <div ng-repeat="row in m.gameBoard.rows">
                                 <board-cell gameStatus="gameStatus" ng-repeat="cell in row.cells">
                         </div>
                 </div>
