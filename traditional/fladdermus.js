@@ -128,12 +128,25 @@ fladdermus.directive('boardCell', function() {
                     }
                 }
             };
-            var uncoverNeighbors = function () {
-                console.log("Good luck!");
+            var uncoverNeighbors = function (cell) {
+                if (cell.covered == false) {
+                    var flaggedCt = (cell.neighborsMap(function (c) {
+                        if (c.flag === "flag") {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    })).reduce(function (a,b) { return a + b; }, 0);
+                    if (flaggedCt === cell.numNeighbors) {
+                        cell.neighborsMap(function (c) {
+                            uncover(c);
+                        });
+                    }
+                }
             };
             $scope.clicky = function (event) {
-                if (event.ctrlKey && $scope.cell.covered == false) {
-                    uncoverNeighbors();
+                if (event.ctrlKey) {
+                    uncoverNeighbors($scope.cell);
                 } else {
                     uncover($scope.cell);
                 }

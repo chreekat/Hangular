@@ -40,16 +40,39 @@ GameBoard = (function () {
             height: h,
             width: w,
         };
+        var Cell = function (props) {
+            this.covered = props.covered;
+            this.numNeighbors = props.numNeighbors;
+            this.musen = props.musen;
+            this.position = props.position;
+        };
+        Cell.prototype.neighborsMap = function (f) {
+            var x = this.position[0], y = this.position[1];
+            var results = [];
+            // left-right and up-down
+            for (lr = -1; lr < 2; lr++) {
+                for (ud = -1; ud < 2; ud++) {
+                    if ((lr != 0 || ud != 0)  // don't process ourself
+                            && (ud + x >= 0 && ud + x < gameBoard.height)
+                            && (lr + y >= 0 && lr + y < gameBoard.width))
+                    {
+                        results.push(f(gameBoard.rows[ud + x].cells[lr + y]));
+                    }
+                }
+            }
+            return results;
+        };
+
         var maxLoc = h * w;
         for (i = 0; i < h; i++) {
             var row = [];
             for (j = 0; j < w; j++) {
-                row.push({
+                row.push(new Cell({
                     covered: true,
                     numNeighbors: 0,
                     musen: false,
                     position: [i,j],
-                });
+                }));
             }
             gameBoard.rows.push({cells: row});
         }
