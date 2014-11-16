@@ -1,1 +1,26 @@
-<span ng-show="m.gameStatus !== 'playing'"> Hi scores! </span>
+<div>
+    <h2>Hi Scores!</h2>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Game Size</th>
+            <th>Score</th>
+        </thead>
+        <tr ng-repeat="rec in records | orderBy:'score'">
+            <td>{{rec.name}}</td>
+            <td>Small</td>
+            <td>{{rec.score}}</td>
+        </tr>
+        <tr ng-show="saveInProgress">
+            <td>
+                <form ng-submit="save()">
+                    <input name="name" ng-model="name">
+                </form>
+            </td>
+            <td> Small </td>
+            <td>{{m.time}}</td>
+        </tr>
+    </table>
+
+    <button ng-click="records = []">Clear</button>
+</div>
