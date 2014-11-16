@@ -105,7 +105,7 @@ fladdermus.directive('boardCell', function() {
                     $scope.m.flagged--;
                 }
             };
-            $scope.uncover = function () {
+            var uncover = function () {
                 if ($scope.m.gameStatus !== "playing"
                         || $scope.cell.flag === "flag"
                         || $scope.cell.covered == false) {
@@ -126,6 +126,16 @@ fladdermus.directive('boardCell', function() {
                             $scope.m.uncoveredCells + $scope.m.numMice) {
                         $scope.gameOver(true);
                     }
+                }
+            };
+            var uncoverNeighbors = function () {
+                console.log("Good luck!");
+            };
+            $scope.clicky = function (event) {
+                if (event.ctrlKey && $scope.cell.covered == false) {
+                    uncoverNeighbors();
+                } else {
+                    uncover();
                 }
             };
             // Hardest part of this entire game. I'd draw a chart, but
