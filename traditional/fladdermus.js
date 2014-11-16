@@ -1,4 +1,4 @@
-fladdermus = angular.module("fladdermus", []);
+fladdermus = angular.module("fladdermus", ['webStorageModule']);
 
 fladdermus.directive('leftmouseup', function($parse) {
     return function(scope, element, attrs) {
