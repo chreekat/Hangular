@@ -58,7 +58,6 @@ fladdermus.directive("timer", function($interval) {
     return {
         restrict: "E",
         template: "<span>{{m.time}}</span>",
-        scope: true,
         link: function(scope) {
             var startTimer, p;
             startTimer = function () {
@@ -66,10 +65,6 @@ fladdermus.directive("timer", function($interval) {
                     function () { scope.m.time = scope.m.time + 1 }, 1000, 999
                 );
             }
-            // This started out being a great example of a problem. I left off
-            // 'scope', so I just had m = { ...} and in the $interval, 'm.time =
-            // ...'. This conflicted with the template, which referred to m.time.
-            scope.m = {time : 0}
             startTimer();
 
             scope.$on('$destroy', function () { $interval.cancel(p) });
@@ -220,6 +215,7 @@ fladdermus.controller('gameCtrlr', function($scope) {
         height: 9,
         numMice: 10,
         flagged: 0,
+        time: 0,
     };
     $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
     $scope.resetGame = function () {
