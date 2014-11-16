@@ -1,33 +1,40 @@
 <!doctype html>
 <html>
 <head>
-	<title>Fladdermusröj</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<script src="bower_components/angular/angular.js"></script>
-	<script src="util.js"></script>
-	<script src="gameBoard.js"></script>
-        <script src="uncover.js"></script>
-	<script src="fladdermus.js"></script>
+    <title>Fladdermusröj</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="util.js"></script>
+    <script src="gameBoard.js"></script>
+    <script src="uncover.js"></script>
+    <script src="fladdermus.js"></script>
 </head>
-<body ng-app="fladdermus" ng-controller="gameCtrlr" >
-	<h1>Fladdermusröj!</h1>
+<body ng-app="fladdermus" 
+        ng-controller="gameCtrlr"
+        ng-mousedown="m.pressed = true"
+        ng-mouseup="m.pressed = false"
+>
+    <h1>Fladdermusröj!</h1>
 
-        <div style="max-width: 40em; margin: auto;">
-            <div style="float: left;">
-                <div>
-                        <score>{{m.numMice - m.flagged}}</score>
-                        <smiley-face ng-click="resetGame()" pressed="{{m.pressed}}"
-                        game-status="{{m.gameStatus}}"></smiley-face>
-                        <timer></timer>
-                </div>
+    <div style="max-width: 40em; margin: auto;">
+        <div style="float: left;">
+            <div>
+                <score>{{m.numMice - m.flagged}}</score>
+                <smiley-face ng-click="resetGame()" ruhroh="m.pressed && m.gameon"
+                        game-status="{{m.gameStatus}}">
+                </smiley-face>
+                <timer></timer>
+            </div>
 
-                <div ng-mousedown="m.pressed = true" style="font-size: 0; border: 1px solid #030303"
-                                 ng-mouseup="m.pressed = false">
-                        <div ng-repeat="row in m.gameBoard.rows">
-                                <board-cell gameStatus="gameStatus" ng-repeat="cell in row.cells">
-                        </div>
+            <div ng-mouseleave="m.gameon = false"
+                     ng-mouseenter="m.gameon = true"
+                     style="font-size: 0; border: 1px solid #030303"
+            >
+                <div ng-repeat="row in m.gameBoard.rows">
+                    <board-cell gameStatus="gameStatus" ng-repeat="cell in row.cells">
                 </div>
             </div>
         </div>
+    </div>
 </body>
 </html>

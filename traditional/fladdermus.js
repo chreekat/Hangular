@@ -31,14 +31,14 @@ fladdermus.directive("smileyFace", function() {
         restrict: "E",
         templateUrl: "smiley.html",
         scope: {
-            pressed: "@",
+            ruhroh: "=",
             gameStatus: "@"
         },
         controller: function ($scope) {
             $scope.imgSrc = function () {
                 var src = "";
                 if ($scope.gameStatus === "playing") {
-                    if ($scope.pressed === "true") {
+                    if ($scope.ruhroh) {
                         src = "uhohface";
                     } else {
                         src = "happyface";
