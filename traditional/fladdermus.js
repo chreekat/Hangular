@@ -204,6 +204,13 @@ fladdermus.directive('boardCell', function() {
     };
 });
 
+fladdermus.directive('hiScores', function() {
+    return {
+        restrict: "E",
+        templateUrl: "hiScores.html"
+    };
+});
+
 fladdermus.controller('gameCtrlr', function($scope) {
     $scope.m = {
         gameBoard: null,
