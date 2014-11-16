@@ -1,4 +1,4 @@
-fladdermus = angular.module("fladdermus", []);
+fladdermus = angular.module("fladdermus", ['webStorageModule']);
 
 fladdermus.directive('leftmouseup', function($parse) {
     return function(scope, element, attrs) {
@@ -58,7 +58,6 @@ fladdermus.directive("timer", function($interval) {
     return {
         restrict: "E",
         template: "<span>{{m.time}}</span>",
-        scope: true,
         link: function(scope) {
             var startTimer, p;
             startTimer = function () {
@@ -66,10 +65,6 @@ fladdermus.directive("timer", function($interval) {
                     function () { scope.m.time = scope.m.time + 1 }, 1000, 999
                 );
             }
-            // This started out being a great example of a problem. I left off
-            // 'scope', so I just had m = { ...} and in the $interval, 'm.time =
-            // ...'. This conflicted with the template, which referred to m.time.
-            scope.m = {time : 0}
             startTimer();
 
             scope.$on('$destroy', function () { $interval.cancel(p) });
@@ -204,6 +199,47 @@ fladdermus.directive('boardCell', function() {
     };
 });
 
+fladdermus.directive('hiScores', function() {
+    return {
+        restrict: "E",
+        templateUrl: "hiScores.html",
+        controller: function($scope, $element, webStorage, $timeout) {
+            $scope.saveInProgress = false;
+            $scope.records = webStorage.get('hiScores');
+            // Remove hashKeys from previous run
+            $scope.records.map(function (rec) {
+                delete rec.$$hashKey;
+            });
+            if ($scope.records === null) {
+                $scope.records = [];
+            }
+            $scope.$watch('records', function (rec) {
+                if (rec !== null) {
+                    webStorage.add('hiScores', rec);
+                }
+            }, true);
+            $scope.$on('game-over', function () {
+                if ($scope.m.gameStatus === "won") {
+                    $scope.saveInProgress = true;
+                    // Set a timeout because the element isn't visible yet.
+                    // Waiting on a digest loop.
+                    $timeout(
+                        function () {
+                            var el = $element.find("input")[0];
+                            el.focus();
+                            el.select();
+                        },
+                        100);
+                }
+            });
+            $scope.save = function () {
+                $scope.saveInProgress = false;
+                $scope.records.push({name: $scope.name, score: $scope.m.time});
+            };
+        },
+    };
+});
+
 fladdermus.controller('gameCtrlr', function($scope) {
     $scope.m = {
         gameBoard: null,
@@ -213,6 +249,7 @@ fladdermus.controller('gameCtrlr', function($scope) {
         height: 9,
         numMice: 10,
         flagged: 0,
+        time: 0,
     };
     $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
     $scope.resetGame = function () {
@@ -223,12 +260,12 @@ fladdermus.controller('gameCtrlr', function($scope) {
         $scope.$broadcast('timer-reset');
     };
     $scope.gameOver = function(won) {
-        $scope.$broadcast('game-over');
         if (won) {
             $scope.m.gameStatus = "won";
             $scope.m.flagged = $scope.m.numMice;
         } else {
             $scope.m.gameStatus = "lost";
         }
+        $scope.$broadcast('game-over');
     };
 });
