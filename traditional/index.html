@@ -1,5 +1,9 @@
 <!doctype html>
-<html>
+<html ng-app="fladdermus"
+        ng-controller="gameCtrlr"
+        ng-mousedown="m.pressed = m.gameon"
+        ng-mouseup="m.pressed = false"
+>
 <head>
     <title>Fladdermusröj</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -9,11 +13,7 @@
     <script src="uncover.js"></script>
     <script src="fladdermus.js"></script>
 </head>
-<body ng-app="fladdermus" 
-        ng-controller="gameCtrlr"
-        ng-mousedown="m.pressed = m.gameon"
-        ng-mouseup="m.pressed = false"
->
+<body>
     <h1>Fladdermusröj!</h1>
 
     <div style="max-width: 40em; margin: auto;">
