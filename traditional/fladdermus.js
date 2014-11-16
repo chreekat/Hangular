@@ -105,20 +105,20 @@ fladdermus.directive('boardCell', function() {
                     $scope.m.flagged--;
                 }
             };
-            var uncover = function () {
+            var uncover = function (cell) {
                 if ($scope.m.gameStatus !== "playing"
-                        || $scope.cell.flag === "flag"
-                        || $scope.cell.covered == false) {
+                        || cell.flag === "flag"
+                        || cell.covered == false) {
                     return;
                 }
-                if ($scope.cell.musen && $scope.m.uncoveredCells > 0) {
+                if (cell.musen && $scope.m.uncoveredCells > 0) {
                     $scope.gameOver(false);
                 } else {
-                    if ($scope.cell.musen) {
-                        hideMouse($scope.m.gameBoard, $scope.cell);
+                    if (cell.musen) {
+                        hideMouse($scope.m.gameBoard, cell);
                     }
                     uncovered = uncoverCascade({
-                        target: $scope.cell,
+                        target: cell,
                         gameBoard: $scope.m.gameBoard,
                     });
                     $scope.m.uncoveredCells += uncovered;
@@ -135,7 +135,7 @@ fladdermus.directive('boardCell', function() {
                 if (event.ctrlKey && $scope.cell.covered == false) {
                     uncoverNeighbors();
                 } else {
-                    uncover();
+                    uncover($scope.cell);
                 }
             };
             // Hardest part of this entire game. I'd draw a chart, but
