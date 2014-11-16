@@ -206,12 +206,13 @@ fladdermus.directive('hiScores', function() {
         controller: function($scope, $element, webStorage, $timeout) {
             $scope.saveInProgress = false;
             $scope.records = webStorage.get('hiScores');
-            // Remove hashKeys from previous run
-            $scope.records.map(function (rec) {
-                delete rec.$$hashKey;
-            });
             if ($scope.records === null) {
                 $scope.records = [];
+            } else {
+                // Remove hashKeys from previous run
+                $scope.records.map(function (rec) {
+                    delete rec.$$hashKey;
+                });
             }
             $scope.$watch('records', function (rec) {
                 if (rec !== null) {
