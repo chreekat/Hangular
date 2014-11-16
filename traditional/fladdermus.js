@@ -105,20 +105,20 @@ fladdermus.directive('boardCell', function() {
                     $scope.m.flagged--;
                 }
             };
-            $scope.uncover = function () {
+            var uncover = function (cell) {
                 if ($scope.m.gameStatus !== "playing"
-                        || $scope.cell.flag === "flag"
-                        || $scope.cell.covered == false) {
+                        || cell.flag === "flag"
+                        || cell.covered == false) {
                     return;
                 }
-                if ($scope.cell.musen && $scope.m.uncoveredCells > 0) {
+                if (cell.musen && $scope.m.uncoveredCells > 0) {
                     $scope.gameOver(false);
                 } else {
-                    if ($scope.cell.musen) {
-                        hideMouse($scope.m.gameBoard, $scope.cell);
+                    if (cell.musen) {
+                        hideMouse($scope.m.gameBoard, cell);
                     }
                     uncovered = uncoverCascade({
-                        target: $scope.cell,
+                        target: cell,
                         gameBoard: $scope.m.gameBoard,
                     });
                     $scope.m.uncoveredCells += uncovered;
@@ -126,6 +126,29 @@ fladdermus.directive('boardCell', function() {
                             $scope.m.uncoveredCells + $scope.m.numMice) {
                         $scope.gameOver(true);
                     }
+                }
+            };
+            var uncoverNeighbors = function (cell) {
+                if (cell.covered == false) {
+                    var flaggedCt = (cell.neighborsMap(function (c) {
+                        if (c.flag === "flag") {
+                            return 1;
+                        } else {
+                            return 0;
+                        }
+                    })).reduce(function (a,b) { return a + b; }, 0);
+                    if (flaggedCt === cell.numNeighbors) {
+                        cell.neighborsMap(function (c) {
+                            uncover(c);
+                        });
+                    }
+                }
+            };
+            $scope.clicky = function (event) {
+                if (event.ctrlKey) {
+                    uncoverNeighbors($scope.cell);
+                } else {
+                    uncover($scope.cell);
                 }
             };
             // Hardest part of this entire game. I'd draw a chart, but
