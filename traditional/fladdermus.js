@@ -208,6 +208,18 @@ fladdermus.directive('boardCell', function() {
 });
 
 fladdermus.directive('hiScores', function() {
+    var migrateOldScores = function (webStorage) {
+        var oldScores = webStorage.get('hiScores');
+        webStorage.remove('hiScores');
+        oldScores.map(function(rec) {
+            delete rec.$$hashKey;
+        });
+        return {
+            small: oldScores,
+            medium: [],
+            large: []
+        };
+    };
     return {
         restrict: "E",
         templateUrl: "hiScores.html",
@@ -217,11 +229,17 @@ fladdermus.directive('hiScores', function() {
             $scope.saveInProgress = false;
             $scope.records = webStorage.get(key);
             if ($scope.records === null) {
-                $scope.records = {
-                    small: [],
-                    medium: [],
-                    large: [],
-                };
+                if (webStorage.has('hiScores')) {
+                    // Backward compatibility
+                    $scope.records = migrateOldScores(webStorage);
+                } else {
+                    $scope.records = {
+                        small: [],
+                        medium: [],
+                        large: [],
+                    };
+                }
+                webStorage.add(key, $scope.records);
             } else {
                 // Remove hashKeys from previous run
                 Object.getOwnPropertyNames($scope.records).map(function (boardSize) {
@@ -236,7 +254,7 @@ fladdermus.directive('hiScores', function() {
                 }
             }, true);
             $scope.$on('game-over', function () {
-                if ($scope.m.gameStatus === "lost") {
+                if ($scope.m.gameStatus === "won") {
                     $scope.saveInProgress = true;
                     // Set a timeout because the element isn't visible yet.
                     // Waiting on a digest loop.
