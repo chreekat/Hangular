@@ -1,5 +1,13 @@
 fladdermus = angular.module("fladdermus", ['webStorageModule']);
-
+// http://codepen.io/WinterJoey/pen/sfFaK
+fladdermus.filter('capitalize', function() {
+    return function(input, all) {
+      return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g,
+            function(txt) {
+                return txt.charAt(0).toUpperCase()
+                    + txt.substr(1).toLowerCase();}) : '';
+    }
+});
 fladdermus.directive('leftmouseup', function($parse) {
     return function(scope, element, attrs) {
         var fn = $parse(attrs.leftmouseup);
@@ -204,23 +212,31 @@ fladdermus.directive('hiScores', function() {
         restrict: "E",
         templateUrl: "hiScores.html",
         controller: function($scope, $element, webStorage, $timeout) {
+            // version 2 : object keyed on size
+            var key = 'hiScores2';
             $scope.saveInProgress = false;
-            $scope.records = webStorage.get('hiScores');
+            $scope.records = webStorage.get(key);
             if ($scope.records === null) {
-                $scope.records = [];
+                $scope.records = {
+                    small: [],
+                    medium: [],
+                    large: [],
+                };
             } else {
                 // Remove hashKeys from previous run
-                $scope.records.map(function (rec) {
-                    delete rec.$$hashKey;
+                Object.getOwnPropertyNames($scope.records).map(function (boardSize) {
+                    $scope.records[boardSize].map(function (rec) {
+                        delete rec.$$hashKey;
+                    })
                 });
             }
-            $scope.$watch('records', function (rec) {
-                if (rec !== null) {
-                    webStorage.add('hiScores', rec);
+            $scope.$watch('records', function (newRec, oldRec) {
+                if (newRec !== null && newRec !== oldRec) {
+                    webStorage.add(key, newRec);
                 }
             }, true);
             $scope.$on('game-over', function () {
-                if ($scope.m.gameStatus === "won") {
+                if ($scope.m.gameStatus === "lost") {
                     $scope.saveInProgress = true;
                     // Set a timeout because the element isn't visible yet.
                     // Waiting on a digest loop.
@@ -235,7 +251,7 @@ fladdermus.directive('hiScores', function() {
             });
             $scope.save = function () {
                 $scope.saveInProgress = false;
-                $scope.records.push({name: $scope.name, score: $scope.m.time});
+                $scope.records[$scope.m.gameSize].push({name: $scope.name, score: $scope.m.time});
             };
         },
     };
