@@ -1,24 +1,21 @@
 <div>
-    <h2>Hi Scores!</h2>
-    <table>
-        <thead>
-            <th>Name</th>
-            <th>Game Size</th>
-            <th>Score</th>
-        </thead>
-        <tr ng-repeat="rec in records | orderBy:'score'">
-            <td>{{rec.name}}</td>
-            <td>Small</td>
-            <td>{{rec.score}}</td>
-        </tr>
+    <table style="min-width: 10em">
+        <caption><h2>Hi Scores!</h2></caption>
         <tr ng-show="saveInProgress">
             <td>
                 <form ng-submit="save()">
                     <input name="name" ng-model="name">
                 </form>
             </td>
-            <td> Small </td>
+            <td> {{m.gameSize|capitalize}} </td>
             <td>{{m.time}}</td>
+        </tr>
+        <tr ng-repeat-start="size in ['small', 'medium', 'large']">
+            <th colspan=2>{{size|capitalize}}</th>
+        </tr>
+        <tr ng-repeat="rec in records[size] | orderBy:'score'" ng-repeat-end>
+            <td>{{rec.name}}</td>
+            <td>{{rec.score}}</td>
         </tr>
     </table>
 

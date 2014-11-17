@@ -1,5 +1,13 @@
 fladdermus = angular.module("fladdermus", ['webStorageModule']);
-
+// http://codepen.io/WinterJoey/pen/sfFaK
+fladdermus.filter('capitalize', function() {
+    return function(input, all) {
+      return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g,
+            function(txt) {
+                return txt.charAt(0).toUpperCase()
+                    + txt.substr(1).toLowerCase();}) : '';
+    }
+});
 fladdermus.directive('leftmouseup', function($parse) {
     return function(scope, element, attrs) {
         var fn = $parse(attrs.leftmouseup);
@@ -117,8 +125,8 @@ fladdermus.directive('boardCell', function() {
                         gameBoard: $scope.m.gameBoard,
                     });
                     $scope.m.uncoveredCells += uncovered;
-                    if ($scope.m.width * $scope.m.height ==
-                            $scope.m.uncoveredCells + $scope.m.numMice) {
+                    if ($scope.m.gameBoard.width * $scope.m.gameBoard.height ==
+                            $scope.m.uncoveredCells + $scope.m.gameBoard.numMice) {
                         $scope.gameOver(true);
                     }
                 }
@@ -200,23 +208,49 @@ fladdermus.directive('boardCell', function() {
 });
 
 fladdermus.directive('hiScores', function() {
+    var migrateOldScores = function (webStorage) {
+        var oldScores = webStorage.get('hiScores');
+        webStorage.remove('hiScores');
+        oldScores.map(function(rec) {
+            delete rec.$$hashKey;
+        });
+        return {
+            small: oldScores,
+            medium: [],
+            large: []
+        };
+    };
     return {
         restrict: "E",
         templateUrl: "hiScores.html",
         controller: function($scope, $element, webStorage, $timeout) {
+            // version 2 : object keyed on size
+            var key = 'hiScores2';
             $scope.saveInProgress = false;
-            $scope.records = webStorage.get('hiScores');
+            $scope.records = webStorage.get(key);
             if ($scope.records === null) {
-                $scope.records = [];
+                if (webStorage.has('hiScores')) {
+                    // Backward compatibility
+                    $scope.records = migrateOldScores(webStorage);
+                } else {
+                    $scope.records = {
+                        small: [],
+                        medium: [],
+                        large: [],
+                    };
+                }
+                webStorage.add(key, $scope.records);
             } else {
                 // Remove hashKeys from previous run
-                $scope.records.map(function (rec) {
-                    delete rec.$$hashKey;
+                Object.getOwnPropertyNames($scope.records).map(function (boardSize) {
+                    $scope.records[boardSize].map(function (rec) {
+                        delete rec.$$hashKey;
+                    })
                 });
             }
-            $scope.$watch('records', function (rec) {
-                if (rec !== null) {
-                    webStorage.add('hiScores', rec);
+            $scope.$watch('records', function (newRec, oldRec) {
+                if (newRec !== null && newRec !== oldRec) {
+                    webStorage.add(key, newRec);
                 }
             }, true);
             $scope.$on('game-over', function () {
@@ -235,7 +269,7 @@ fladdermus.directive('hiScores', function() {
             });
             $scope.save = function () {
                 $scope.saveInProgress = false;
-                $scope.records.push({name: $scope.name, score: $scope.m.time});
+                $scope.records[$scope.m.gameSize].push({name: $scope.name, score: $scope.m.time});
             };
         },
     };
@@ -245,17 +279,15 @@ fladdermus.controller('gameCtrlr', function($scope) {
     $scope.m = {
         gameBoard: null,
         gameStatus: "playing",
+        gameSize: "small",
         uncoveredCells: 0,
-        width: 9,
-        height: 9,
-        numMice: 10,
         flagged: 0,
         time: 0,
     };
-    $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+    $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
-        $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+        $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');
@@ -269,4 +301,13 @@ fladdermus.controller('gameCtrlr', function($scope) {
         }
         $scope.$broadcast('game-over');
     };
+    $scope.$watch('m.gameSize', function (newSize, oldSize) {
+        if ((newSize === oldSize)
+                || ($scope.m.gameStatus === "playing"
+                    && $scope.m.uncoveredCells > 0)
+                    && ! confirm("Start a new game with a new size?")) {
+            return;
+        }
+        $scope.resetGame();
+    });
 });

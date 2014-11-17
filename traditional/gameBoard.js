@@ -31,14 +31,32 @@ GameBoard = (function () {
         }
     };
 
-    genGameBoard = function (h, w, numMus) {
-        if (numMus > h*w) {
-            throw("Impossible game board: more mus than tiles!");
+    genGameBoard = function (size) {
+        var h, w, numMice;
+        switch (size) {
+            case "small":
+                h = 9;
+                w = 9;
+                numMice = 10;
+                break;
+            case "medium":
+                h = 16;
+                w = 16;
+                numMice = 40;
+                break;
+            case "large":
+                h = 16;
+                w = 30;
+                numMice = 99;
+                break;
+            default:
+                throw("Unknown board size: " + size);
         }
         var gameBoard = {
             rows: [],
             height: h,
             width: w,
+            numMice: numMice,
         };
         var Cell = function (props) {
             this.covered = props.covered;
@@ -78,7 +96,7 @@ GameBoard = (function () {
         }
 
         var n = 0;
-        while (n < numMus) {
+        while (n < numMice) {
             loc = divMod(Math.floor(Math.random() * maxLoc), w);
             if (! gameBoard.rows[loc[0]].cells[loc[1]].musen) {
                 set(gameBoard, loc);
