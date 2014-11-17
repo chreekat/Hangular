@@ -267,4 +267,12 @@ fladdermus.controller('gameCtrlr', function($scope) {
         }
         $scope.$broadcast('game-over');
     };
+    $scope.$watch('m.gameSize', function (newSize, oldSize) {
+        if ((newSize === oldSize)
+                || ($scope.m.gameStatus === "playing"
+                    && ! confirm("Start a new game with a new size?"))) {
+            return;
+        }
+        $scope.resetGame();
+    });
 });
