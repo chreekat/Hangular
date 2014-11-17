@@ -20,10 +20,10 @@
     <div style="float:left">
         <hi-scores></hi-scores>
     </div>
-    <div style="max-width: 40em; margin: auto;">
+    <div style="margin: auto;">
         <div style="float: left;">
             <div>
-                <score>{{m.numMice - m.flagged}}</score>
+                <score>{{m.gameBoard.numMice - m.flagged}}</score>
                 <smiley-face ng-click="resetGame()" ruhroh="m.pressed && m.gameon"
                         game-status="{{m.gameStatus}}">
                 </smiley-face>

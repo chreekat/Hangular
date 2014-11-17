@@ -117,8 +117,8 @@ fladdermus.directive('boardCell', function() {
                         gameBoard: $scope.m.gameBoard,
                     });
                     $scope.m.uncoveredCells += uncovered;
-                    if ($scope.m.width * $scope.m.height ==
-                            $scope.m.uncoveredCells + $scope.m.numMice) {
+                    if ($scope.m.gameBoard.width * $scope.m.gameBoard.height ==
+                            $scope.m.uncoveredCells + $scope.m.gameBoard.numMice) {
                         $scope.gameOver(true);
                     }
                 }
@@ -245,17 +245,15 @@ fladdermus.controller('gameCtrlr', function($scope) {
     $scope.m = {
         gameBoard: null,
         gameStatus: "playing",
+        gameSize: "small",
         uncoveredCells: 0,
-        width: 9,
-        height: 9,
-        numMice: 10,
         flagged: 0,
         time: 0,
     };
-    $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+    $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
-        $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.width, $scope.m.height, $scope.m.numMice);
+        $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');
