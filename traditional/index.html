@@ -40,5 +40,12 @@
             </div>
         </div>
     </div>
+    <div style="float: left; margin: 4em 0 1em 4em;">
+        <h2>Game Size</h2>
+        <input ng-model="m.gameSize" ng-repeat-start="size in ['small', 'medium', 'large']"
+                id="radioGameSize{{size}}" type=radio name=gameSize value="{{size}}">
+        <label for="radioGameSize{{size}}">{{size}}</label>
+        <br ng-repeat-end>
+    </div>
 </body>
 </html>
