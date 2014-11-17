@@ -1,14 +1,3 @@
-var directions =
-    [ "N"
-    , "NE"
-    , "E"
-    , "SE"
-    , "S"
-    , "SW"
-    , "W"
-    , "NW"
-    ];
-
 mkMkBoard = function (targetBoard) {
     var Board = function (row, col) {
         this.target = targetBoard.gameBoard.rows[row].cells[col];
