@@ -304,7 +304,8 @@ fladdermus.controller('gameCtrlr', function($scope) {
     $scope.$watch('m.gameSize', function (newSize, oldSize) {
         if ((newSize === oldSize)
                 || ($scope.m.gameStatus === "playing"
-                    && ! confirm("Start a new game with a new size?"))) {
+                    && $scope.m.uncoveredCells > 0)
+                    && ! confirm("Start a new game with a new size?")) {
             return;
         }
         $scope.resetGame();
