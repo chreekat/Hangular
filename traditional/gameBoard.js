@@ -1,8 +1,11 @@
 GameBoard = (function () {
-    set = function (gameBoard, loc) {
+
+  // private:
+    var set = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
         gameBoard.rows[x].cells[y].musen = true;
         // left-right and up-down
+        var lr, ud;
         for (lr = -1; lr < 2; lr++) {
             for (ud = -1; ud < 2; ud++) {
                 if ((lr != 0 || ud != 0)  // don't process ourself
@@ -15,10 +18,11 @@ GameBoard = (function () {
         }
     };
 
-    unset = function (gameBoard, loc) {
+    var unset = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
         gameBoard.rows[x].cells[y].musen = false;
         // left-right and up-down
+        var lr, ud;
         for (lr = -1; lr < 2; lr++) {
             for (ud = -1; ud < 2; ud++) {
                 if ((lr != 0 || ud != 0)  // don't process ourself
@@ -31,7 +35,8 @@ GameBoard = (function () {
         }
     };
 
-    genGameBoard = function (size) {
+  // public:
+    var genGameBoard = function (size) {
         var h, w, numMice;
         switch (size) {
             case "small":
@@ -68,6 +73,7 @@ GameBoard = (function () {
             var x = this.position[0], y = this.position[1];
             var results = [];
             // left-right and up-down
+            var lr, ud;
             for (lr = -1; lr < 2; lr++) {
                 for (ud = -1; ud < 2; ud++) {
                     if ((lr != 0 || ud != 0)  // don't process ourself
@@ -81,7 +87,7 @@ GameBoard = (function () {
             return results;
         };
 
-        var maxLoc = h * w;
+        var i, j, maxLoc = h * w;
         for (i = 0; i < h; i++) {
             var row = [];
             for (j = 0; j < w; j++) {
@@ -110,6 +116,7 @@ GameBoard = (function () {
     hideMouse = function (gameBoard, cell) {
         var loc = cell.position;
         unset(gameBoard, loc);
+        var i, j;
         for (i = 0; i < gameBoard.height; i++) {
             for (j = 0; j < gameBoard.width; j++) {
                 // Goat's blood on the mantle
