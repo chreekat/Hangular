@@ -1,0 +1,25 @@
+div.hiScores {
+    float: left;
+}
+
+div.gameContainer {
+    margin: auto;
+}
+
+div.boardContainer {
+    font-size: 0;
+    border: 1px solid #030303;
+}
+
+div.gameControls {
+    float: left;
+    margin: 4em 0 1em 4em;
+}
+
+img.boardCell {
+    width: 34px;
+}
+
+table.hiScores--table {
+    min-width: 10em;
+}
