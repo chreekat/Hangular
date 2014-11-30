@@ -7,3 +7,11 @@ divMod = function(n, d) {
     var mod = n - (d * divisor);
     return [divisor, mod];
 };
+
+zip = function (fn, as, bs) {
+    ret = [];
+    for (i = 0; i < Math.min(as.length, bs.length); i ++) {
+        ret.push(fn(as[i], bs[i]));
+    }
+    return ret;
+};

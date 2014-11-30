@@ -1,22 +1,3 @@
-var directions =
-    [ "N"
-    , "NE"
-    , "E"
-    , "SE"
-    , "S"
-    , "SW"
-    , "W"
-    , "NW"
-    ];
-
-zip = function (fn, as, bs) {
-    ret = [];
-    for (i = 0; i < Math.min(as.length, bs.length); i ++) {
-        ret.push(fn(as[i], bs[i]));
-    }
-    return ret;
-};
-
 mkMkBoard = function (targetBoard) {
     var Board = function (row, col) {
         this.target = targetBoard.gameBoard.rows[row].cells[col];
