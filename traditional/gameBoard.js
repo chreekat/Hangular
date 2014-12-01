@@ -108,6 +108,20 @@ gb.factory("GameBoard", function () {
             }
             return results;
         };
+        GameBoardCtor.prototype.uncoverCascade = function (targetCell) {
+            var numUncovered = 0, uncoveredCts;
+            var that = this;
+            if (targetCell.covered) {
+                targetCell.covered = false;
+                numUncovered = 1;
+                if (targetCell.numNeighbors === 0) {
+                    uncoveredCts = this.neighborsMap(targetCell.position,
+                            function (c) { return that.uncoverCascade(c) });
+                    numUncovered += uncoveredCts.reduce(function(a,b) { return a + b }, 0);
+                }
+            }
+            return numUncovered;
+        };
 
         return GameBoardCtor;
     }());
