@@ -21,6 +21,9 @@ div.hiScores {
     float: left;
     padding: 3px;
 }
+.hiScores--table {
+    min-width: 13em;
+}
 div.gameControls {
     float: left;
     padding: 3px;
