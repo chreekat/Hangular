@@ -1,4 +1,5 @@
-fladdermus = angular.module("fladdermus", ['webStorageModule']);
+"use strict";
+var fladdermus = angular.module("fladdermus", ['webStorageModule']);
 // http://codepen.io/WinterJoey/pen/sfFaK
 fladdermus.filter('capitalize', function() {
     return function(input, all) {
@@ -126,7 +127,7 @@ fladdermus.directive('boardCell', function() {
                     if (cell.musen) {
                         GameBoard.hideMouse($scope.m.gameBoard, cell);
                     }
-                    uncovered = uncoverCascade({
+                    var uncovered = uncoverCascade({
                         target: cell,
                         gameBoard: $scope.m.gameBoard,
                     });

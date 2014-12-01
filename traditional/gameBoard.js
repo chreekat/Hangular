@@ -1,5 +1,6 @@
 GameBoard = (function () {
 
+  "use strict";
   // private:
     var set = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
@@ -103,7 +104,7 @@ GameBoard = (function () {
 
         var n = 0;
         while (n < numMice) {
-            loc = divMod(Math.floor(Math.random() * maxLoc), w);
+            var loc = divMod(Math.floor(Math.random() * maxLoc), w);
             if (! gameBoard.rows[loc[0]].cells[loc[1]].musen) {
                 set(gameBoard, loc);
                 n++;
