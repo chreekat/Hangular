@@ -8,35 +8,17 @@ gb.factory("GameBoard", function () {
     var set = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
         gameBoard.rows[x].cells[y].musen = true;
-        // left-right and up-down
-        var lr, ud;
-        for (lr = -1; lr < 2; lr++) {
-            for (ud = -1; ud < 2; ud++) {
-                if ((lr != 0 || ud != 0)  // don't process ourself
-                        && (ud + x >= 0 && ud + x < gameBoard.height)
-                        && (lr + y >= 0 && lr + y < gameBoard.width))
-                {
-                    gameBoard.rows[ud + x].cells[lr + y].numNeighbors++;
-                }
-            }
-        }
+        gameBoard.rows[x].cells[y].neighborsMap(function (c) {
+            c.numNeighbors++;
+        });
     };
 
     var unset = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
         gameBoard.rows[x].cells[y].musen = false;
-        // left-right and up-down
-        var lr, ud;
-        for (lr = -1; lr < 2; lr++) {
-            for (ud = -1; ud < 2; ud++) {
-                if ((lr != 0 || ud != 0)  // don't process ourself
-                        && (ud + x >= 0 && ud + x < gameBoard.height)
-                        && (lr + y >= 0 && lr + y < gameBoard.width))
-                {
-                    gameBoard.rows[ud + x].cells[lr + y].numNeighbors--;
-                }
-            }
-        }
+        gameBoard.rows[x].cells[y].neighborsMap(function (c) {
+            c.numNeighbors--;
+        });
     };
 
   // public:
