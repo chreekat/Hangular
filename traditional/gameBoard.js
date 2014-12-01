@@ -1,3 +1,11 @@
+/*global angular, divMod */
+/*properties
+    cells, covered, factory, floor, genGameBoard, height, hideMouse, module,
+    musen, neighborsMap, numMice, numNeighbors, position, prototype, push,
+    random, rows, width
+*/
+/*jslint continue: true, plusplus: true, vars: true, white: true */
+
 (function () {
 
 "use strict";
@@ -47,7 +55,7 @@ gb.factory("GameBoard", function () {
             rows: [],
             height: h,
             width: w,
-            numMice: numMice,
+            numMice: numMice
         };
         var Cell = function (props) {
             this.covered = props.covered;
@@ -62,7 +70,7 @@ gb.factory("GameBoard", function () {
             var lr, ud;
             for (lr = -1; lr < 2; lr++) {
                 for (ud = -1; ud < 2; ud++) {
-                    if ((lr != 0 || ud != 0)  // don't process ourself
+                    if ((lr !== 0 || ud !== 0)  // don't process ourself
                             && (ud + x >= 0 && ud + x < gameBoard.height)
                             && (lr + y >= 0 && lr + y < gameBoard.width))
                     {
@@ -73,23 +81,23 @@ gb.factory("GameBoard", function () {
             return results;
         };
 
-        var i, j, maxLoc = h * w;
+        var i, j, maxLoc = h * w, row;
         for (i = 0; i < h; i++) {
-            var row = [];
+            row = [];
             for (j = 0; j < w; j++) {
                 row.push(new Cell({
                     covered: true,
                     numNeighbors: 0,
                     musen: false,
-                    position: [i,j],
+                    position: [i,j]
                 }));
             }
             gameBoard.rows.push({cells: row});
         }
 
-        var n = 0;
+        var n = 0, loc;
         while (n < numMice) {
-            var loc = divMod(Math.floor(Math.random() * maxLoc), w);
+            loc = divMod(Math.floor(Math.random() * maxLoc), w);
             if (! gameBoard.rows[loc[0]].cells[loc[1]].musen) {
                 set(gameBoard, loc);
                 n++;
@@ -102,15 +110,15 @@ gb.factory("GameBoard", function () {
     var hideMouse = function (gameBoard, cell) {
         var loc = cell.position;
         unset(gameBoard, loc);
-        var i, j;
+        var i, j, tempCell;
         for (i = 0; i < gameBoard.height; i++) {
             for (j = 0; j < gameBoard.width; j++) {
                 // Goat's blood on the mantle
-                if (i == loc[0] && j == loc[1]) {
+                if (i === loc[0] && j === loc[1]) {
                     continue;
                 }
-                var cell = gameBoard.rows[i].cells[j];
-                if (!cell.musen) {
+                tempCell = gameBoard.rows[i].cells[j];
+                if (!tempCell.musen) {
                     set(gameBoard, [i,j]);
                     return;
                 }
@@ -120,7 +128,7 @@ gb.factory("GameBoard", function () {
 
     return {
         genGameBoard: genGameBoard,
-        hideMouse: hideMouse,
+        hideMouse: hideMouse
     };
 
 });
