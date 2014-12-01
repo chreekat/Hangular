@@ -280,11 +280,11 @@ fladdermus.directive('hiScores', function() {
     };
 });
 
-fladdermus.controller('gameCtrlr', function($scope) {
+fladdermus.controller('gameCtrlr', function($scope, webStorage) {
     $scope.m = {
         gameBoard: null,
         gameStatus: "playing",
-        gameSize: "small",
+        gameSize: webStorage.get("gameSize") || "small",
         uncoveredCells: 0,
         flagged: 0,
         time: 0,
@@ -313,6 +313,7 @@ fladdermus.controller('gameCtrlr', function($scope) {
                     && ! confirm("Start a new game with a new size?")) {
             return;
         }
+        webStorage.add("gameSize", newSize);
         $scope.resetGame();
     });
 });
