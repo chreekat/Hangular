@@ -1,4 +1,5 @@
-fladdermus = angular.module("fladdermus", ['webStorageModule']);
+"use strict";
+var fladdermus = angular.module("fladdermus", ['webStorageModule', 'fladdermus.gameBoard']);
 // http://codepen.io/WinterJoey/pen/sfFaK
 fladdermus.filter('capitalize', function() {
     return function(input, all) {
@@ -94,7 +95,7 @@ fladdermus.directive("timer", function($interval) {
     };
 });
 
-fladdermus.directive('boardCell', function() {
+fladdermus.directive('boardCell', function(GameBoard) {
     return {
         restrict: 'EA',
         templateUrl: 'boardCell.html',
@@ -124,9 +125,9 @@ fladdermus.directive('boardCell', function() {
                     $scope.gameOver(false);
                 } else {
                     if (cell.musen) {
-                        hideMouse($scope.m.gameBoard, cell);
+                        $scope.m.gameBoard.hideMouse(cell);
                     }
-                    uncovered = uncoverCascade({
+                    var uncovered = uncoverCascade({
                         target: cell,
                         gameBoard: $scope.m.gameBoard,
                     });
@@ -139,15 +140,17 @@ fladdermus.directive('boardCell', function() {
             };
             var uncoverNeighbors = function (cell) {
                 if (cell.covered == false) {
-                    var flaggedCt = (cell.neighborsMap(function (c) {
-                        if (c.flag === "flag") {
-                            return 1;
-                        } else {
-                            return 0;
+                    var flaggedCt = ($scope.m.gameBoard.neighborsMap(cell.position,
+                        function (c) {
+                            if (c.flag === "flag") {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
                         }
-                    })).reduce(function (a,b) { return a + b; }, 0);
+                    )).reduce(function (a,b) { return a + b; }, 0);
                     if (flaggedCt === cell.numNeighbors) {
-                        cell.neighborsMap(function (c) {
+                        $scope.m.gameBoard.neighborsMap(cell.position, function (c) {
                             uncover(c);
                         });
                     }
@@ -280,7 +283,7 @@ fladdermus.directive('hiScores', function() {
     };
 });
 
-fladdermus.controller('gameCtrlr', function($scope, webStorage) {
+fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
     $scope.m = {
         gameBoard: null,
         gameStatus: "playing",
@@ -289,10 +292,10 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage) {
         flagged: 0,
         time: 0,
     };
-    $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
+    $scope.m.gameBoard = GameBoard($scope.m.gameSize);
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
-        $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
+        $scope.m.gameBoard = GameBoard($scope.m.gameSize);
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');

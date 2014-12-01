@@ -1,4 +1,5 @@
-mkMkBoard = function (targetBoard) {
+"use strict";
+var mkMkBoard = function (targetBoard) {
     var Board = function (row, col) {
         this.target = targetBoard.gameBoard.rows[row].cells[col];
     };
@@ -10,7 +11,7 @@ mkMkBoard = function (targetBoard) {
 };
 
 // Returns a list of targetBoards.
-uncoverCascadeNeighbors = function (targetBoard) {
+var uncoverCascadeNeighbors = function (targetBoard) {
     var mkBoard = mkMkBoard(targetBoard);
     var row, col;
     var neighbors = [];
@@ -44,7 +45,7 @@ uncoverCascadeNeighbors = function (targetBoard) {
 };
 
 /* Modifies board in place. Returns number of uncovered cells. */
-uncoverCascade = function (targetBoard) {
+var uncoverCascade = function (targetBoard) {
     var numUncovered = 0;
     if (targetBoard.target.covered) {
         targetBoard.target.covered = false;
