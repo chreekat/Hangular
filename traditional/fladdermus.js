@@ -6,7 +6,13 @@ fladdermus.filter('capitalize', function() {
             function(txt) {
                 return txt.charAt(0).toUpperCase()
                     + txt.substr(1).toLowerCase();}) : '';
-    }
+    };
+});
+fladdermus.filter('pad', function () {
+    return function(input, size) {
+        var s = "" + Math.pow(10, size+1) + input;
+        return s.slice(-size);
+    };
 });
 fladdermus.directive('leftmouseup', function($parse) {
     return function(scope, element, attrs) {
@@ -65,7 +71,7 @@ fladdermus.directive("smileyFace", function() {
 fladdermus.directive("timer", function($interval) {
     return {
         restrict: "E",
-        template: "<span>{{m.time}}</span>",
+        template: "<span>{{m.time | pad:3}}</span>",
         link: function(scope) {
             var startTimer, p;
             startTimer = function () {
@@ -90,7 +96,7 @@ fladdermus.directive("timer", function($interval) {
 
 fladdermus.directive('boardCell', function() {
     return {
-        restrict: 'E',
+        restrict: 'EA',
         templateUrl: 'boardCell.html',
         controller: function ($scope) {
             $scope.cell.flag = 'none';
