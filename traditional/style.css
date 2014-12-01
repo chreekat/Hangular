@@ -14,6 +14,8 @@ h1, h2 {
 div.gameContainer {
     float: left;
     margin-right: 2px;
+    border: 3px #BBBBBB solid;
+    border-radius: 3px;
 }
 div.hiScores {
     float: left;
@@ -25,21 +27,10 @@ div.gameControls {
     margin-right: 2px;
 }
 div.gameInfo {
-    position: fixed;
     background: #fafafa;
     right: 0;
     left: 0;
-}
-div.pageHeader {
-    /* Sadly, this must be computed by commenting out div.gameInfo's
-     * "position: fixed" and inspecting its natural height.
-     *
-     * Alternatively, I could put in a hidden shim div that holds the same
-     * contents as div.gameInfo... */
-    height: 117px;
-}
-div.pageContainer {
-    padding-top: 20px;
+    text-align: center;
 }
 
 /* TODO: Determine if there's a better way to do this.
@@ -52,10 +43,7 @@ div.pageContainer {
  * border-collapse: separate. Then each outside edge must be processed to
  * remove its border. */
 table.gameBoard {
-    border-collapse: separate;
-    border-spacing: 0;
-    border: 3px #BBBBBB solid;
-    border-radius: 3px;
+    border-collapse: collapse;
 }
 .gameBoard td {
     padding: 0;
