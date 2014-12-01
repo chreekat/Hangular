@@ -214,22 +214,31 @@ fladdermus.directive('boardCell', function() {
 });
 
 fladdermus.directive('hiScores', function() {
+    var Records = function () {
+        this.small = [];
+        this.medium = [];
+        this.large = [];
+    };
     var migrateOldScores = function (webStorage) {
         var oldScores = webStorage.get('hiScores');
         webStorage.remove('hiScores');
         oldScores.map(function(rec) {
             delete rec.$$hashKey;
         });
-        return {
-            small: oldScores,
-            medium: [],
-            large: []
-        };
+        var rec = new Records();
+        rec.small = oldScores;
+        return rec;
     };
     return {
         restrict: "E",
         templateUrl: "hiScores.html",
         controller: function($scope, $element, webStorage, $timeout) {
+            $scope.clearScores = function () {
+                if (confirm("Clear all scores?")) {
+                    $scope.records = new Records();
+                }
+            };
+
             // version 2 : object keyed on size
             var key = 'hiScores2';
             $scope.saveInProgress = false;
@@ -239,11 +248,7 @@ fladdermus.directive('hiScores', function() {
                     // Backward compatibility
                     $scope.records = migrateOldScores(webStorage);
                 } else {
-                    $scope.records = {
-                        small: [],
-                        medium: [],
-                        large: [],
-                    };
+                    $scope.records = new Records() ;
                 }
                 webStorage.add(key, $scope.records);
             } else {
