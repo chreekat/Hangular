@@ -3,6 +3,7 @@ body {
     border: 0;
     padding: 0;
     margin: 0;
+    background: #fafafa;
 }
 h1, h2 {
     margin-top: 0;
@@ -12,18 +13,22 @@ h1, h2 {
 /* top level layout */
 div.gameContainer {
     float: left;
+    margin-right: 2px;
 }
 div.hiScores {
     float: left;
+    padding: 3px;
 }
 div.gameControls {
     float: left;
+    padding: 3px;
+    margin-right: 2px;
 }
 div.gameInfo {
     position: fixed;
+    background: #fafafa;
     right: 0;
     left: 0;
-    background: white;
 }
 div.pageHeader {
     /* Sadly, this must be computed by commenting out div.gameInfo's
@@ -32,6 +37,9 @@ div.pageHeader {
      * Alternatively, I could put in a hidden shim div that holds the same
      * contents as div.gameInfo... */
     height: 117px;
+}
+div.pageContainer {
+    padding-top: 20px;
 }
 
 /* TODO: Determine if there's a better way to do this.
