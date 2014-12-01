@@ -18,23 +18,6 @@ gb.factory("GameBoard", function () {
         this.musen = props.musen;
         this.position = props.position;
     };
-    Cell.prototype.neighborsMap = function (gameBoard, f) {
-        var x = this.position[0], y = this.position[1];
-        var results = [];
-        // left-right and up-down
-        var lr, ud;
-        for (lr = -1; lr < 2; lr++) {
-            for (ud = -1; ud < 2; ud++) {
-                if ((lr !== 0 || ud !== 0)  // don't process ourself
-                        && (ud + x >= 0 && ud + x < gameBoard.height)
-                        && (lr + y >= 0 && lr + y < gameBoard.width))
-                {
-                    results.push(f(gameBoard.rows[ud + x].cells[lr + y]));
-                }
-            }
-        }
-        return results;
-    };
 
     var GameBoard = (function () {
         // private, closure methods
@@ -56,26 +39,26 @@ gb.factory("GameBoard", function () {
             return emptyRows;
         };
         var addMice = function (numMice) {
-            var n = 0, maxLoc = this.height * this.width, loc;
-            while (n < numMice) {
+            var numAdded = 0, maxLoc = this.height * this.width, loc;
+            while (numAdded < numMice) {
                 loc = divMod(Math.floor(Math.random() * maxLoc), this.width);
                 if (! this.rows[loc[0]].cells[loc[1]].musen) {
                     set.call(this, loc);
-                    n++;
+                    numAdded++;
                 }
             }
         };
         var set = function (loc) {
             var x = loc[0], y = loc[1];
             this.rows[x].cells[y].musen = true;
-            this.rows[x].cells[y].neighborsMap(this, function (c) {
+            this.neighborsMap([x, y], function (c) {
                 c.numNeighbors++;
             });
         };
         var unset = function (loc) {
             var x = loc[0], y = loc[1];
             this.rows[x].cells[y].musen = false;
-            this.rows[x].cells[y].neighborsMap(this, function (c) {
+            this.neighborsMap([x, y], function (c) {
                 c.numNeighbors--;
             });
         };
@@ -107,6 +90,23 @@ gb.factory("GameBoard", function () {
                     }
                 }
             }
+        };
+        GameBoardCtor.prototype.neighborsMap = function (targetPos, f) {
+            var x = targetPos[0], y = targetPos[1];
+            var results = [];
+            // left-right and up-down
+            var lr, ud;
+            for (lr = -1; lr < 2; lr++) {
+                for (ud = -1; ud < 2; ud++) {
+                    if ((lr !== 0 || ud !== 0)  // don't process target position
+                            && (ud + x >= 0 && ud + x < this.height)
+                            && (lr + y >= 0 && lr + y < this.width))
+                    {
+                        results.push(f(this.rows[ud + x].cells[lr + y]));
+                    }
+                }
+            }
+            return results;
         };
 
         return GameBoardCtor;

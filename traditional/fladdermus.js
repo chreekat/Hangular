@@ -140,7 +140,7 @@ fladdermus.directive('boardCell', function(GameBoard) {
             };
             var uncoverNeighbors = function (cell) {
                 if (cell.covered == false) {
-                    var flaggedCt = (cell.neighborsMap($scope.m.gameBoard,
+                    var flaggedCt = ($scope.m.gameBoard.neighborsMap(cell.position,
                         function (c) {
                             if (c.flag === "flag") {
                                 return 1;
@@ -150,7 +150,7 @@ fladdermus.directive('boardCell', function(GameBoard) {
                         }
                     )).reduce(function (a,b) { return a + b; }, 0);
                     if (flaggedCt === cell.numNeighbors) {
-                        cell.neighborsMap($scope.m.gameBoard, function (c) {
+                        $scope.m.gameBoard.neighborsMap(cell.position, function (c) {
                             uncover(c);
                         });
                     }
