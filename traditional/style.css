@@ -24,6 +24,9 @@ div.hiScores {
 .hiScores--table {
     min-width: 13em;
 }
+.hiScores--table td:last-child {
+    text-align: right;
+}
 div.gameControls {
     float: left;
     padding: 3px;
@@ -36,15 +39,6 @@ div.gameInfo {
     text-align: center;
 }
 
-/* TODO: Determine if there's a better way to do this.
- *
- * "This" is giving a table a rounded border, giving cells individual
- * borders, and disabling the outer border of cells on the outside of the
- * table.
- *
- * Giving a table a rounded border seems to require keeping
- * border-collapse: separate. Then each outside edge must be processed to
- * remove its border. */
 table.gameBoard {
     border-collapse: collapse;
 }
@@ -59,7 +53,7 @@ table.gameBoard {
     border-left: 0;
 }
 .gameBoard tr:first-child td {
-    border-top: 0;
+    border-top: 2px solid #bbbbbb;;
 }
 .gameBoard tr:last-child td {
     border-bottom: 0;
