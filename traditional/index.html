@@ -21,7 +21,7 @@
         <div class="gameContainer">
 
             <div class="gameInfo">
-                <score>{{m.gameBoard.numMice - m.flagged}}</score>
+                <score>{{m.gameBoard.numMice - m.flagged | pad:3}}</score>
                 <smiley-face ng-click="resetGame()" ruhroh="m.pressed && m.gameon"
                         game-status="{{m.gameStatus}}">
                 </smiley-face>
