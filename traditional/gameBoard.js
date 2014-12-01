@@ -1,6 +1,6 @@
 /*global angular, divMod */
 /*properties
-    cells, covered, factory, floor, genGameBoard, height, hideMouse, module,
+    cells, covered, factory, floor, height, hideMouse, module,
     musen, neighborsMap, numMice, numNeighbors, position, prototype, push,
     random, rows, width
 */
@@ -50,85 +50,86 @@ gb.factory("GameBoard", function () {
         });
     };
 
-  // public:
-    var genGameBoard = function (size) {
-        var h, w, numMice;
+    var GameBoard = (function () {
+        // private, closure methods
+        var genEmptyRows = function (h, w) {
+            var emptyRows = [];
+            var i, j, row;
+            for (i = 0; i < h; i++) {
+                row = [];
+                for (j = 0; j < w; j++) {
+                    row.push(new Cell({
+                        covered: true,
+                        numNeighbors: 0,
+                        musen: false,
+                        position: [i,j]
+                    }));
+                }
+                emptyRows.push({cells: row});
+            }
+            return emptyRows;
+        };
+        var addMice = function (numMice) {
+            var n = 0, maxLoc = this.height * this.width, loc;
+            while (n < numMice) {
+                loc = divMod(Math.floor(Math.random() * maxLoc), this.width);
+                if (! this.rows[loc[0]].cells[loc[1]].musen) {
+                    set(this, loc);
+                    n++;
+                }
+            }
+        };
+
+        // Constructor function
+        var GameBoardCtor = function (h, w, numMice) {
+            this.height = h;
+            this.width = w;
+            this.numMice = numMice;
+            this.rows = genEmptyRows(h, w);
+            addMice.call(this, numMice);
+        };
+
+        // Public member methods
+        GameBoardCtor.prototype.hideMouse = function (cell) {
+            var loc = cell.position;
+            unset(this, loc);
+            var i, j, tempCell;
+            for (i = 0; i < this.height; i++) {
+                for (j = 0; j < this.width; j++) {
+                    // Goat's blood on the mantle
+                    if (i === loc[0] && j === loc[1]) {
+                        continue;
+                    }
+                    tempCell = this.rows[i].cells[j];
+                    if (!tempCell.musen) {
+                        set(this, [i,j]);
+                        return;
+                    }
+                }
+            }
+        };
+
+        return GameBoardCtor;
+    }());
+
+  // public to the GameBoard service:
+    return function (size) {
+        var gameBoard;
         switch (size) {
             case "small":
-                h = 9;
-                w = 9;
-                numMice = 10;
+                gameBoard = new GameBoard(9, 9, 10);
                 break;
             case "medium":
-                h = 16;
-                w = 16;
-                numMice = 40;
+                gameBoard = new GameBoard(16, 16, 40);
                 break;
             case "large":
-                h = 16;
-                w = 30;
-                numMice = 99;
+                gameBoard = new GameBoard(16, 30, 99);
                 break;
             default:
                 throw("Unknown board size: " + size);
         }
-        var gameBoard = {
-            rows: [],
-            height: h,
-            width: w,
-            numMice: numMice
-        };
-
-        var i, j, maxLoc = h * w, row;
-        for (i = 0; i < h; i++) {
-            row = [];
-            for (j = 0; j < w; j++) {
-                row.push(new Cell({
-                    covered: true,
-                    numNeighbors: 0,
-                    musen: false,
-                    position: [i,j]
-                }));
-            }
-            gameBoard.rows.push({cells: row});
-        }
-
-        var n = 0, loc;
-        while (n < numMice) {
-            loc = divMod(Math.floor(Math.random() * maxLoc), w);
-            if (! gameBoard.rows[loc[0]].cells[loc[1]].musen) {
-                set(gameBoard, loc);
-                n++;
-            }
-        }
-
         return gameBoard;
     };
-
-    var hideMouse = function (gameBoard, cell) {
-        var loc = cell.position;
-        unset(gameBoard, loc);
-        var i, j, tempCell;
-        for (i = 0; i < gameBoard.height; i++) {
-            for (j = 0; j < gameBoard.width; j++) {
-                // Goat's blood on the mantle
-                if (i === loc[0] && j === loc[1]) {
-                    continue;
-                }
-                tempCell = gameBoard.rows[i].cells[j];
-                if (!tempCell.musen) {
-                    set(gameBoard, [i,j]);
-                    return;
-                }
-            }
-        }
-    };
-
-    return {
-        genGameBoard: genGameBoard,
-        hideMouse: hideMouse
-    };
-
 });
 
 }());

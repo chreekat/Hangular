@@ -125,7 +125,7 @@ fladdermus.directive('boardCell', function(GameBoard) {
                     $scope.gameOver(false);
                 } else {
                     if (cell.musen) {
-                        GameBoard.hideMouse($scope.m.gameBoard, cell);
+                        $scope.m.gameBoard.hideMouse(cell);
                     }
                     var uncovered = uncoverCascade({
                         target: cell,
@@ -292,10 +292,10 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
         flagged: 0,
         time: 0,
     };
-    $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
+    $scope.m.gameBoard = GameBoard($scope.m.gameSize);
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
-        $scope.m.gameBoard = GameBoard.genGameBoard($scope.m.gameSize);
+        $scope.m.gameBoard = GameBoard($scope.m.gameSize);
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');
