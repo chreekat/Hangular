@@ -1,6 +1,9 @@
-GameBoard = (function () {
+(function () {
 
-  "use strict";
+"use strict";
+var gb = angular.module("fladdermus.gameBoard", []);
+gb.factory("GameBoard", function () {
+
   // private:
     var set = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
@@ -137,5 +140,7 @@ GameBoard = (function () {
         genGameBoard: genGameBoard,
         hideMouse: hideMouse,
     };
+
+});
 
 }());

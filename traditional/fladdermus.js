@@ -1,5 +1,5 @@
 "use strict";
-var fladdermus = angular.module("fladdermus", ['webStorageModule']);
+var fladdermus = angular.module("fladdermus", ['webStorageModule', 'fladdermus.gameBoard']);
 // http://codepen.io/WinterJoey/pen/sfFaK
 fladdermus.filter('capitalize', function() {
     return function(input, all) {
@@ -95,7 +95,7 @@ fladdermus.directive("timer", function($interval) {
     };
 });
 
-fladdermus.directive('boardCell', function() {
+fladdermus.directive('boardCell', function(GameBoard) {
     return {
         restrict: 'EA',
         templateUrl: 'boardCell.html',
@@ -281,7 +281,7 @@ fladdermus.directive('hiScores', function() {
     };
 });
 
-fladdermus.controller('gameCtrlr', function($scope, webStorage) {
+fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
     $scope.m = {
         gameBoard: null,
         gameStatus: "playing",
