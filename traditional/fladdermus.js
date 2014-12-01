@@ -301,7 +301,7 @@ fladdermus.controller('gameCtrlr', function($scope) {
     $scope.gameOver = function(won) {
         if (won) {
             $scope.m.gameStatus = "won";
-            $scope.m.flagged = $scope.m.numMice;
+            $scope.m.flagged = $scope.m.gameBoard.numMice;
         } else {
             $scope.m.gameStatus = "lost";
         }
