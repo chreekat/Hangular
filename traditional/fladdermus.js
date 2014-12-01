@@ -90,7 +90,7 @@ fladdermus.directive("timer", function($interval) {
 
 fladdermus.directive('boardCell', function() {
     return {
-        restrict: 'E',
+        restrict: 'EA',
         templateUrl: 'boardCell.html',
         controller: function ($scope) {
             $scope.cell.flag = 'none';

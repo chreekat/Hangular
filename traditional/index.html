@@ -16,37 +16,40 @@
     <script src="fladdermus.js"></script>
 </head>
 <body>
-    <h1>Fladdermusröj!</h1>
-
-    <div class="hiScores">
-        <hi-scores></hi-scores>
+    <div class="pageHeader">
+        <div class="gameInfo">
+            <h1>Fladdermusröj!</h1>
+            <score>{{m.gameBoard.numMice - m.flagged}}</score>
+            <smiley-face ng-click="resetGame()" ruhroh="m.pressed && m.gameon"
+                    game-status="{{m.gameStatus}}">
+            </smiley-face>
+            <timer></timer>
+        </div>
     </div>
-    <div class="gameContainer">
-        <div style="float: left;">
-            <div>
-                <score>{{m.gameBoard.numMice - m.flagged}}</score>
-                <smiley-face ng-click="resetGame()" ruhroh="m.pressed && m.gameon"
-                        game-status="{{m.gameStatus}}">
-                </smiley-face>
-                <timer></timer>
-            </div>
+    <div class="pageContainer">
+        <div class="gameContainer">
 
             <div ng-mouseleave="m.gameon = false"
                      ng-mouseenter="m.gameon = true"
                      class="boardContainer"
             >
-                <div ng-repeat="row in m.gameBoard.rows">
-                    <board-cell gameStatus="gameStatus" ng-repeat="cell in row.cells">
-                </div>
+                <table class="gameBoard">
+                    <tr ng-repeat="row in m.gameBoard.rows">
+                        <td board-cell gameStatus="gameStatus" ng-repeat="cell in row.cells"></td>
+                    </tr>
+                </table>
             </div>
         </div>
-    </div>
-    <div class="gameControls">
-        <h2>Game Size</h2>
-        <input ng-model="m.gameSize" ng-repeat-start="size in ['small', 'medium', 'large']"
-                id="radioGameSize{{size}}" type=radio name=gameSize value="{{size}}">
-        <label for="radioGameSize{{size}}">{{size}}</label>
-        <br ng-repeat-end>
+        <div class="gameControls">
+            <h2>Game Size</h2>
+            <input ng-model="m.gameSize" ng-repeat-start="size in ['small', 'medium', 'large']"
+                    id="radioGameSize{{size}}" type=radio name=gameSize value="{{size}}">
+            <label for="radioGameSize{{size}}">{{size}}</label>
+            <br ng-repeat-end>
+        </div>
+        <div class="hiScores">
+            <hi-scores></hi-scores>
+        </div>
     </div>
 </body>
 </html>
