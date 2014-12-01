@@ -35,20 +35,6 @@ gb.factory("GameBoard", function () {
         }
         return results;
     };
-    var set = function (gameBoard, loc) {
-        var x = loc[0], y = loc[1];
-        gameBoard.rows[x].cells[y].musen = true;
-        gameBoard.rows[x].cells[y].neighborsMap(gameBoard, function (c) {
-            c.numNeighbors++;
-        });
-    };
-    var unset = function (gameBoard, loc) {
-        var x = loc[0], y = loc[1];
-        gameBoard.rows[x].cells[y].musen = false;
-        gameBoard.rows[x].cells[y].neighborsMap(gameBoard, function (c) {
-            c.numNeighbors--;
-        });
-    };
 
     var GameBoard = (function () {
         // private, closure methods
@@ -74,10 +60,24 @@ gb.factory("GameBoard", function () {
             while (n < numMice) {
                 loc = divMod(Math.floor(Math.random() * maxLoc), this.width);
                 if (! this.rows[loc[0]].cells[loc[1]].musen) {
-                    set(this, loc);
+                    set.call(this, loc);
                     n++;
                 }
             }
+        };
+        var set = function (loc) {
+            var x = loc[0], y = loc[1];
+            this.rows[x].cells[y].musen = true;
+            this.rows[x].cells[y].neighborsMap(this, function (c) {
+                c.numNeighbors++;
+            });
+        };
+        var unset = function (loc) {
+            var x = loc[0], y = loc[1];
+            this.rows[x].cells[y].musen = false;
+            this.rows[x].cells[y].neighborsMap(this, function (c) {
+                c.numNeighbors--;
+            });
         };
 
         // Constructor function
@@ -92,7 +92,7 @@ gb.factory("GameBoard", function () {
         // Public member methods
         GameBoardCtor.prototype.hideMouse = function (cell) {
             var loc = cell.position;
-            unset(this, loc);
+            unset.call(this, loc);
             var i, j, tempCell;
             for (i = 0; i < this.height; i++) {
                 for (j = 0; j < this.width; j++) {
@@ -102,7 +102,7 @@ gb.factory("GameBoard", function () {
                     }
                     tempCell = this.rows[i].cells[j];
                     if (!tempCell.musen) {
-                        set(this, [i,j]);
+                        set.call(this, [i,j]);
                         return;
                     }
                 }
