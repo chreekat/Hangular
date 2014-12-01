@@ -233,12 +233,6 @@ fladdermus.directive('hiScores', function() {
         restrict: "E",
         templateUrl: "hiScores.html",
         controller: function($scope, $element, webStorage, $timeout) {
-            $scope.clearScores = function () {
-                if (confirm("Clear all scores?")) {
-                    $scope.records = new Records();
-                }
-            };
-
             // version 2 : object keyed on size
             var key = 'hiScores2';
             $scope.saveInProgress = false;
