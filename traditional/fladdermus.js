@@ -124,7 +124,7 @@ fladdermus.directive('boardCell', function() {
                     $scope.gameOver(false);
                 } else {
                     if (cell.musen) {
-                        hideMouse($scope.m.gameBoard, cell);
+                        GameBoard.hideMouse($scope.m.gameBoard, cell);
                     }
                     uncovered = uncoverCascade({
                         target: cell,

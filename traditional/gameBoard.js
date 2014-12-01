@@ -113,7 +113,7 @@ GameBoard = (function () {
         return gameBoard;
     };
 
-    hideMouse = function (gameBoard, cell) {
+    var hideMouse = function (gameBoard, cell) {
         var loc = cell.position;
         unset(gameBoard, loc);
         var i, j;
