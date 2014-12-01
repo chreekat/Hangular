@@ -12,19 +12,40 @@
 var gb = angular.module("fladdermus.gameBoard", []);
 gb.factory("GameBoard", function () {
 
-  // private:
+    var Cell = function (props) {
+        this.covered = props.covered;
+        this.numNeighbors = props.numNeighbors;
+        this.musen = props.musen;
+        this.position = props.position;
+    };
+    Cell.prototype.neighborsMap = function (gameBoard, f) {
+        var x = this.position[0], y = this.position[1];
+        var results = [];
+        // left-right and up-down
+        var lr, ud;
+        for (lr = -1; lr < 2; lr++) {
+            for (ud = -1; ud < 2; ud++) {
+                if ((lr !== 0 || ud !== 0)  // don't process ourself
+                        && (ud + x >= 0 && ud + x < gameBoard.height)
+                        && (lr + y >= 0 && lr + y < gameBoard.width))
+                {
+                    results.push(f(gameBoard.rows[ud + x].cells[lr + y]));
+                }
+            }
+        }
+        return results;
+    };
     var set = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
         gameBoard.rows[x].cells[y].musen = true;
-        gameBoard.rows[x].cells[y].neighborsMap(function (c) {
+        gameBoard.rows[x].cells[y].neighborsMap(gameBoard, function (c) {
             c.numNeighbors++;
         });
     };
-
     var unset = function (gameBoard, loc) {
         var x = loc[0], y = loc[1];
         gameBoard.rows[x].cells[y].musen = false;
-        gameBoard.rows[x].cells[y].neighborsMap(function (c) {
+        gameBoard.rows[x].cells[y].neighborsMap(gameBoard, function (c) {
             c.numNeighbors--;
         });
     };
@@ -56,29 +77,6 @@ gb.factory("GameBoard", function () {
             height: h,
             width: w,
             numMice: numMice
-        };
-        var Cell = function (props) {
-            this.covered = props.covered;
-            this.numNeighbors = props.numNeighbors;
-            this.musen = props.musen;
-            this.position = props.position;
-        };
-        Cell.prototype.neighborsMap = function (f) {
-            var x = this.position[0], y = this.position[1];
-            var results = [];
-            // left-right and up-down
-            var lr, ud;
-            for (lr = -1; lr < 2; lr++) {
-                for (ud = -1; ud < 2; ud++) {
-                    if ((lr !== 0 || ud !== 0)  // don't process ourself
-                            && (ud + x >= 0 && ud + x < gameBoard.height)
-                            && (lr + y >= 0 && lr + y < gameBoard.width))
-                    {
-                        results.push(f(gameBoard.rows[ud + x].cells[lr + y]));
-                    }
-                }
-            }
-            return results;
         };
 
         var i, j, maxLoc = h * w, row;

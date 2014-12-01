@@ -140,15 +140,17 @@ fladdermus.directive('boardCell', function(GameBoard) {
             };
             var uncoverNeighbors = function (cell) {
                 if (cell.covered == false) {
-                    var flaggedCt = (cell.neighborsMap(function (c) {
-                        if (c.flag === "flag") {
-                            return 1;
-                        } else {
-                            return 0;
+                    var flaggedCt = (cell.neighborsMap($scope.m.gameBoard,
+                        function (c) {
+                            if (c.flag === "flag") {
+                                return 1;
+                            } else {
+                                return 0;
+                            }
                         }
-                    })).reduce(function (a,b) { return a + b; }, 0);
+                    )).reduce(function (a,b) { return a + b; }, 0);
                     if (flaggedCt === cell.numNeighbors) {
-                        cell.neighborsMap(function (c) {
+                        cell.neighborsMap($scope.m.gameBoard, function (c) {
                             uncover(c);
                         });
                     }
