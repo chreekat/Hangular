@@ -298,3 +298,18 @@ functions, but christ. I'll just make some global functions instead.
 
 Working with Haskell modules, despite whatever flaws they may have, has
 spoiled me rotten.
+
+~~~ 02-dec 12:12
+
+Yesterday I managed to write the module I mentioned previously. I've been
+cleaning up the javascript, which has been challenging. I have also been
+adding some style/styling-behavior using css, which is also massively
+challenging. The app is nearly finished, though! There's remaining ugliness in
+fladdermus.js -- more could be broken out to separate modules -- but it will
+stay because I've reached my limit. Still, there's one thing left, which is
+making all the clicks work properly. The whole right-click-is-contextmenu is
+strange. It doesn't help that I want different handlers for clicks in
+nested regions.
+
+Oh yeah! The whole "A directive named cancelContextMenu must be written
+cancel-context-menu in use" bullshit! Thanks, Angular! Thanks, Javascript!
