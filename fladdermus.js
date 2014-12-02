@@ -1,9 +1,28 @@
+/*global angular */
+/*jslint
+    white: true, regexp: true, vars: true, unparam: true browser: true
+*/
+/*properties
+    $$hashKey, $broadcast, $on, $watch, add, alert, beginMouseAction, bind,
+    button, cancel, cell, cellAction, charAt, cleanupMouseAction, confirm,
+    controller, covered, ctrlKey, directive, filter, find, flag, flagged, focus,
+    gameBoard, gameOver, gameSize, gameStatus, gameon, get, getOwnPropertyNames,
+    has, height, hideMouse, imgSrc, indexOf, large, link, m, map, medium, module,
+    mouseAction, musen, name, neighborsMap, numMice, numNeighbors, position, pow,
+    preventDefault, push, records, reduce, remove, replace, resetGame, restrict,
+    ruhroh, save, saveInProgress, scope, score, select, slice, small, substr,
+    template, templateUrl, time, toLowerCase, toUpperCase, toggleflag,
+    uncoverCascade, uncoveredCells, width
+*/
+
+(function () {
 "use strict";
+
 var fladdermus = angular.module("fladdermus", ['webStorageModule', 'fladdermus.gameBoard']);
 // http://codepen.io/WinterJoey/pen/sfFaK
 fladdermus.filter('capitalize', function() {
-    return function(input, all) {
-      return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g,
+    return function(input) {
+      return (!!input) ? input.replace(/([^\W_]+[^\s\-]*) */g,
             function(txt) {
                 return txt.charAt(0).toUpperCase()
                     + txt.substr(1).toLowerCase();}) : '';
@@ -11,12 +30,12 @@ fladdermus.filter('capitalize', function() {
 });
 fladdermus.filter('pad', function () {
     return function(input, size) {
-        var s = "" + Math.pow(10, size+1) + input;
+        var s = String(Math.pow(10, size+1)) + input;
         return s.slice(-size);
     };
 });
 fladdermus.directive('preventContextMenu', function () {
-    return function(scope, element, attrs) {
+    return function(scope, element) {
         element.bind('contextmenu', function (event) {
             event.preventDefault();
         });
@@ -45,7 +64,7 @@ fladdermus.directive("smileyFace", function() {
                     src = "happyface";
                 }
                 return "img/" + src + ".png";
-            }
+            };
         }
     };
 });
@@ -58,12 +77,12 @@ fladdermus.directive("timer", function($interval) {
             var startTimer, p;
             startTimer = function () {
                 p = $interval(
-                    function () { scope.m.time = scope.m.time + 1 }, 1000, 999
+                    function () { scope.m.time = scope.m.time + 1; }, 1000, 999
                 );
-            }
+            };
             startTimer();
 
-            scope.$on('$destroy', function () { $interval.cancel(p) });
+            scope.$on('$destroy', function () { $interval.cancel(p); });
             scope.$on('timer-reset', function () {
                 $interval.cancel(p);
                 scope.m.time = 0;
@@ -72,11 +91,11 @@ fladdermus.directive("timer", function($interval) {
             scope.$on('game-over', function () {
                 $interval.cancel(p);
             });
-        },
+        }
     };
 });
 
-fladdermus.directive('boardCell', function(GameBoard) {
+fladdermus.directive('boardCell', function() {
     return {
         restrict: 'EA',
         templateUrl: 'boardCell.html',
@@ -91,15 +110,15 @@ fladdermus.directive('boardCell', function(GameBoard) {
                 var i = flags.indexOf($scope.cell.flag);
                 $scope.cell.flag = flags[(i+1) % 3];
                 if (i === 0) {
-                    $scope.m.flagged++;
+                    $scope.m.flagged += 1;
                 } else if (i === 1) {
-                    $scope.m.flagged--;
+                    $scope.m.flagged -= 1;
                 }
             };
             var uncover = function (cell) {
                 if ($scope.m.gameStatus !== "playing"
                         || cell.flag === "flag"
-                        || cell.covered == false) {
+                        || cell.covered === false) {
                     return;
                 }
                 if (cell.musen && $scope.m.uncoveredCells > 0) {
@@ -110,21 +129,17 @@ fladdermus.directive('boardCell', function(GameBoard) {
                     }
                     var uncovered = $scope.m.gameBoard.uncoverCascade(cell);
                     $scope.m.uncoveredCells += uncovered;
-                    if ($scope.m.gameBoard.width * $scope.m.gameBoard.height ==
+                    if ($scope.m.gameBoard.width * $scope.m.gameBoard.height ===
                             $scope.m.uncoveredCells + $scope.m.gameBoard.numMice) {
                         $scope.gameOver(true);
                     }
                 }
             };
             var uncoverNeighbors = function (cell) {
-                if (cell.covered == false) {
+                if (cell.covered === false) {
                     var flaggedCt = ($scope.m.gameBoard.neighborsMap(cell.position,
                         function (c) {
-                            if (c.flag === "flag") {
-                                return 1;
-                            } else {
-                                return 0;
-                            }
+                            return (c.flag === "flag" ? 1 : 0);
                         }
                     )).reduce(function (a,b) { return a + b; }, 0);
                     if (flaggedCt === cell.numNeighbors) {
@@ -200,7 +215,7 @@ fladdermus.directive('boardCell', function(GameBoard) {
                 }
                 return "img/" + src + ".png";
             };
-        },
+        }
     };
 });
 
@@ -241,7 +256,7 @@ fladdermus.directive('hiScores', function() {
                 Object.getOwnPropertyNames($scope.records).map(function (boardSize) {
                     $scope.records[boardSize].map(function (rec) {
                         delete rec.$$hashKey;
-                    })
+                    });
                 });
             }
             $scope.$watch('records', function (newRec, oldRec) {
@@ -267,7 +282,7 @@ fladdermus.directive('hiScores', function() {
                 $scope.saveInProgress = false;
                 $scope.records[$scope.m.gameSize].push({name: $scope.name, score: $scope.m.time});
             };
-        },
+        }
     };
 });
 
@@ -279,9 +294,9 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
         uncoveredCells: 0,
         flagged: 0,
         time: 0,
-        mouseAction: "none",
+        mouseAction: "none"
     };
-    $scope.m.gameBoard = GameBoard($scope.m.gameSize);
+    $scope.m.gameBoard = new GameBoard($scope.m.gameSize);
     $scope.beginMouseAction = function (event) {
         if ($scope.m.gameon && (event.button === 0 || event.button === 2)) {
             var btn = event.button;
@@ -291,7 +306,7 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
                     (btn === 0 && act === "uncover")
                     || (btn === 2 && (act === "uncoverNeighbors" || act === "flag")))
             {
-                alert(
+                window.alert(
                         "Oh noes! Please send these words to Bryan: " +
                         "'Your program broke. btn = " + btn + ", act = " +
                         act + "'");
@@ -308,10 +323,10 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
         if (!$scope.m.gameon && (event.button === 0 || event.button === 2)) {
             $scope.m.mouseAction = "none";
         }
-    }
+    };
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
-        $scope.m.gameBoard = GameBoard($scope.m.gameSize);
+        $scope.m.gameBoard = new GameBoard($scope.m.gameSize);
         $scope.m.flagged = 0;
         $scope.m.uncoveredCells = 0;
         $scope.$broadcast('timer-reset');
@@ -326,13 +341,16 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
         $scope.$broadcast('game-over');
     };
     $scope.$watch('m.gameSize', function (newSize, oldSize) {
-        if ((newSize === oldSize)
-                || ($scope.m.gameStatus === "playing"
+        if (
+                (newSize === oldSize)
+                || (($scope.m.gameStatus === "playing"
                     && $scope.m.uncoveredCells > 0)
-                    && ! confirm("Start a new game with a new size?")) {
+                    && ! window.confirm("Start a new game with a new size?"))) {
             return;
         }
         webStorage.add("gameSize", newSize);
         $scope.resetGame();
     });
 });
+
+}());

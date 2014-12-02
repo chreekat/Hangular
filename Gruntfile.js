@@ -7,7 +7,6 @@ module.exports = function(grunt) {
             all: {
                 src: [
                     "fladdermus.js",
-                    "util.js",
                     "gameBoard.js",
                 ]
             }

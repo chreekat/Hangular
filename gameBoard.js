@@ -1,14 +1,14 @@
-/*global angular, divMod */
+/*global angular */
 /*properties
     cells, covered, factory, floor, height, hideMouse, module,
     musen, neighborsMap, numMice, numNeighbors, position, prototype, push,
-    random, rows, width
+    random, rows, width, call, uncoverCascade, reduce
 */
 /*jslint continue: true, plusplus: true, vars: true, white: true */
 
 (function () {
-
 "use strict";
+
 var gb = angular.module("fladdermus.gameBoard", []);
 gb.factory("GameBoard", function () {
 
@@ -38,15 +38,10 @@ gb.factory("GameBoard", function () {
             }
             return emptyRows;
         };
-        var addMice = function (numMice) {
-            var numAdded = 0, maxLoc = this.height * this.width, loc;
-            while (numAdded < numMice) {
-                loc = divMod(Math.floor(Math.random() * maxLoc), this.width);
-                if (! this.rows[loc[0]].cells[loc[1]].musen) {
-                    set.call(this, loc);
-                    numAdded++;
-                }
-            }
+        var divMod = function (n, d) {
+            var divisor = Math.floor(n / d);
+            var mod = n - (d * divisor);
+            return [divisor, mod];
         };
         var set = function (loc) {
             var x = loc[0], y = loc[1];
@@ -61,6 +56,16 @@ gb.factory("GameBoard", function () {
             this.neighborsMap([x, y], function (c) {
                 c.numNeighbors--;
             });
+        };
+        var addMice = function (numMice) {
+            var numAdded = 0, maxLoc = this.height * this.width, loc;
+            while (numAdded < numMice) {
+                loc = divMod(Math.floor(Math.random() * maxLoc), this.width);
+                if (! this.rows[loc[0]].cells[loc[1]].musen) {
+                    set.call(this, loc);
+                    numAdded++;
+                }
+            }
         };
 
         // Constructor function
@@ -116,8 +121,8 @@ gb.factory("GameBoard", function () {
                 numUncovered = 1;
                 if (targetCell.numNeighbors === 0) {
                     uncoveredCts = this.neighborsMap(targetCell.position,
-                            function (c) { return that.uncoverCascade(c) });
-                    numUncovered += uncoveredCts.reduce(function(a,b) { return a + b }, 0);
+                            function (c) { return that.uncoverCascade(c); });
+                    numUncovered += uncoveredCts.reduce(function(a,b) { return a + b; }, 0);
                 }
             }
             return numUncovered;
