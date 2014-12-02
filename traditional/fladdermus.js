@@ -282,6 +282,21 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
         mouseAction: "none",
     };
     $scope.m.gameBoard = GameBoard($scope.m.gameSize);
+    $scope.beginMouseAction = function (event) {
+        if ($scope.m.gameon && (event.button === 0 || event.button === 2)) {
+            if ($scope.m.mouseAction === "none") {
+                $scope.m.mouseAction = event.button ? "flag" : "uncover";
+            } else if ($scope.m.mouseAction !== event.button) {
+                $scope.m.mouseAction = "uncoverNeighbors";
+            }
+        }
+    };
+    // Handle mouse releases outside the game board
+    $scope.cleanupMouseAction = function (event) {
+        if (!$scope.m.gameon && (event.button === 0 || event.button === 2)) {
+            $scope.m.mouseAction = "none";
+        }
+    }
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
         $scope.m.gameBoard = GameBoard($scope.m.gameSize);
