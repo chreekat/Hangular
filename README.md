@@ -1,3 +1,4 @@
-Code for a Minesweeper clone, *Fladdermus*.
+Code for a Minesweeper clone, *Fladdermusröj*.
 
-Load this up in [Github Pages](https://chreekat.github.io/fladdermus) to play!
+Load this up in [Github Pages](https://chreekat.github.io/fladdermus) to
+play! (`gh-pages` is identical to `master`.)
