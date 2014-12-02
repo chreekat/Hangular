@@ -15,6 +15,13 @@ fladdermus.filter('pad', function () {
         return s.slice(-size);
     };
 });
+fladdermus.directive('preventContextMenu', function () {
+    return function(scope, element, attrs) {
+        element.bind('contextmenu', function (event) {
+            event.preventDefault();
+        });
+    };
+});
 fladdermus.directive('leftmouseup', function($parse) {
     return function(scope, element, attrs) {
         var fn = $parse(attrs.leftmouseup);
