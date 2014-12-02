@@ -30,6 +30,10 @@ div.gameControls {
     padding: 3px;
     margin-right: 2px;
 }
+p.sourceLink {
+    clear: left;
+    padding-top: 4ex;
+}
 
 /*
  * Hi scores
