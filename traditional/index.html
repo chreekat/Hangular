@@ -1,8 +1,8 @@
 <!doctype html>
 <html ng-app="fladdermus"
         ng-controller="gameCtrlr"
-        ng-mousedown="m.pressed = m.gameon"
-        ng-mouseup="m.pressed = false"
+        ng-mousedown="beginMouseAction($event)"
+        ng-mouseup="cleanupMouseAction($event)"
 >
 <head>
     <title>Fladdermusröj</title>
@@ -21,7 +21,7 @@
 
             <div class="gameInfo">
                 <score>{{m.gameBoard.numMice - m.flagged | pad:3}}</score>
-                <smiley-face ng-click="resetGame()" ruhroh="m.pressed && m.gameon"
+                <smiley-face ng-click="resetGame()" ruhroh="m.mouseAction !== 'none'"
                         game-status="{{m.gameStatus}}">
                 </smiley-face>
                 <timer></timer>
@@ -29,6 +29,7 @@
             <div ng-mouseleave="m.gameon = false"
                      ng-mouseenter="m.gameon = true"
                      class="boardContainer"
+                     prevent-context-menu
             >
                 <table class="gameBoard">
                     <tr ng-repeat="row in m.gameBoard.rows">

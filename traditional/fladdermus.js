@@ -15,32 +15,13 @@ fladdermus.filter('pad', function () {
         return s.slice(-size);
     };
 });
-fladdermus.directive('leftmouseup', function($parse) {
+fladdermus.directive('preventContextMenu', function () {
     return function(scope, element, attrs) {
-        var fn = $parse(attrs.leftmouseup);
-        element.bind('mouseup', function(event) {
-            if (event.button === 0) {
-                scope.$apply(function () {
-                    event.preventDefault();
-                    fn(scope, {$event:event});
-                });
-            }
+        element.bind('contextmenu', function (event) {
+            event.preventDefault();
         });
     };
 });
-fladdermus.directive('rightclick', function($parse) {
-    return function(scope, element, attrs) {
-        var fn = $parse(attrs.rightclick);
-        element.bind('contextmenu', function(event) {
-            scope.$apply(function() {
-                event.preventDefault();
-                fn(scope, {$event:event});
-            });
-        });
-    };
-});
-
-
 fladdermus.directive("smileyFace", function() {
     return {
         restrict: "E",
@@ -153,11 +134,21 @@ fladdermus.directive('boardCell', function(GameBoard) {
                     }
                 }
             };
-            $scope.clicky = function (event) {
-                if (event.ctrlKey) {
+            $scope.cellAction = function (event) {
+                if (event.button === 0 && $scope.m.mouseAction === "uncover") {
+                    $scope.m.mouseAction = "none";
+                    if (event.ctrlKey) {
+                        uncoverNeighbors($scope.cell);
+                    } else {
+                        uncover($scope.cell);
+                    }
+                } else if (event.button === 2 && $scope.m.mouseAction === "flag") {
+                    $scope.m.mouseAction = "none";
+                    $scope.toggleflag();
+                } else if (event.button === 0 && $scope.m.mouseAction === "uncoverNeighbors") {
                     uncoverNeighbors($scope.cell);
-                } else {
-                    uncover($scope.cell);
+                } else if (event.button === 2 && $scope.m.mouseAction !== "flag") {
+                    $scope.m.mouseAction = "none";
                 }
             };
             // Hardest part of this entire game. I'd draw a chart, but
@@ -288,8 +279,24 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
         uncoveredCells: 0,
         flagged: 0,
         time: 0,
+        mouseAction: "none",
     };
     $scope.m.gameBoard = GameBoard($scope.m.gameSize);
+    $scope.beginMouseAction = function (event) {
+        if ($scope.m.gameon && (event.button === 0 || event.button === 2)) {
+            if ($scope.m.mouseAction === "none") {
+                $scope.m.mouseAction = event.button ? "flag" : "uncover";
+            } else if ($scope.m.mouseAction !== event.button) {
+                $scope.m.mouseAction = "uncoverNeighbors";
+            }
+        }
+    };
+    // Handle mouse releases outside the game board
+    $scope.cleanupMouseAction = function (event) {
+        if (!$scope.m.gameon && (event.button === 0 || event.button === 2)) {
+            $scope.m.mouseAction = "none";
+        }
+    }
     $scope.resetGame = function () {
         $scope.m.gameStatus = "playing";
         $scope.m.gameBoard = GameBoard($scope.m.gameSize);
