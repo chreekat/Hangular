@@ -284,9 +284,21 @@ fladdermus.controller('gameCtrlr', function($scope, webStorage, GameBoard) {
     $scope.m.gameBoard = GameBoard($scope.m.gameSize);
     $scope.beginMouseAction = function (event) {
         if ($scope.m.gameon && (event.button === 0 || event.button === 2)) {
-            if ($scope.m.mouseAction === "none") {
-                $scope.m.mouseAction = event.button ? "flag" : "uncover";
-            } else if ($scope.m.mouseAction !== event.button) {
+            var btn = event.button;
+            var act = $scope.m.mouseAction;
+            // Check for race conditions
+            if (
+                    (btn === 0 && act === "uncover")
+                    || (btn === 2 && (act === "uncoverNeighbors" || act === "flag")))
+            {
+                alert(
+                        "Oh noes! Please send these words to Bryan: " +
+                        "'Your program broke. btn = " + btn + ", act = " +
+                        act + "'");
+            }
+            if (act === "none") {
+                $scope.m.mouseAction = btn ? "flag" : "uncover";
+            } else if (act === "flag" && btn === 0) {
                 $scope.m.mouseAction = "uncoverNeighbors";
             }
         }

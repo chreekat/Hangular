@@ -313,3 +313,27 @@ nested regions.
 
 Oh yeah! The whole "A directive named cancelContextMenu must be written
 cancel-context-menu in use" bullshit! Thanks, Angular! Thanks, Javascript!
+
+An hour later, now I have a race condition in my click events. I can get
+stuck in the "uncoverNeighbors" action, even with both mouse buttons up.
+For this to happen, the last two processed events must have been two clicks
+down. I suppose that means on a quick click, the up event gets processed
+before the down event.
+
+In that case, I think the best solution might be to not rely on the correct
+ordering, rather than try to force it. Right now the user can get into
+"uncoverNeighbors" mode by pressing both buttons down, in any order. Let's
+make it so only R->L works.
+
+Ok, now stuck in "uncover". That means it thinks the order was R↓ R↑ L↑ L↓.
+
+Right, I think the solution is to do actions on mouse down, rather than
+mouse up. That will actually clean up a lot of state handling, since the
+only state that matters is "right button is down". But shit, still, that
+means there could be a race condition. Maybe prevent mousedowns that happen
+100ms after a mouseup? "Force" the proper ordering after all?
+
+That didn't work either. I know: I can detect bogosity if there's two down
+events with no up event between.
+
+Just kidding! No race condition. Just a bug in the beginMouseAction logic.
