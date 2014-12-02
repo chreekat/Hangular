@@ -1,4 +1,6 @@
-/* Minor reset */
+/*
+ * Minor reset
+ * */
 body {
     border: 0;
     padding: 0;
@@ -10,7 +12,9 @@ h1, h2 {
     margin-bottom: 0.2em;
 }
 
-/* top level layout */
+/*
+ * Top level layout
+ * */
 div.gameContainer {
     float: left;
     margin-right: 2px;
@@ -21,24 +25,34 @@ div.hiScores {
     float: left;
     padding: 3px;
 }
+div.gameControls {
+    float: left;
+    padding: 3px;
+    margin-right: 2px;
+}
+
+/*
+ * Hi scores
+ * */
 .hiScores--table {
     min-width: 13em;
 }
 .hiScores--table td:last-child {
     text-align: right;
 }
-div.gameControls {
-    float: left;
-    padding: 3px;
-    margin-right: 2px;
-}
+
+/*
+ * Game container innards, esp. the board table
+ * */
 div.gameInfo {
     background: #fafafa;
     right: 0;
     left: 0;
     text-align: center;
 }
-
+img.smiley {
+    width: 70px;
+}
 table.gameBoard {
     border-collapse: collapse;
 }
@@ -64,8 +78,4 @@ table.gameBoard {
 img.boardCell {
     width: 33px;
     float: left;
-}
-
-img.smiley {
-    width: 70px;
 }
