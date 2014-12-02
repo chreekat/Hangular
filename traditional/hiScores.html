@@ -7,10 +7,12 @@
                     <input name="name" ng-model="name">
                 </form>
             </td>
-            <td> {{m.gameSize|capitalize}} </td>
+            <td>{{m.gameSize|capitalize}}</td>
             <td>{{m.time}}</td>
         </tr>
-        <tr ng-hide="records[size].length == 0" ng-repeat-start="size in ['small', 'medium', 'large']">
+        <tr
+                ng-hide="records[size].length == 0"
+                ng-repeat-start="size in ['small', 'medium', 'large']">
             <th colspan=2>{{size|capitalize}}</th>
         </tr>
         <tr ng-repeat="rec in records[size] | orderBy:'score'" ng-repeat-end>
