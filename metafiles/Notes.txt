@@ -337,3 +337,34 @@ That didn't work either. I know: I can detect bogosity if there's two down
 events with no up event between.
 
 Just kidding! No race condition. Just a bug in the beginMouseAction logic.
+
+~~~ 06-dec 18:06
+
+Now working on igeolise chat client, but still thinking about UI. Thought:
+
+It seems better to make a component that sets children props, then use it
+as a mixin to a class that fits that component into a particular layout.
+E.g.
+
+chanListItems = React.createClass(
+    init: ->
+        @children = @props.chans.map((chan) ->
+            (li -> "{chan.name}")
+        )
+)
+
+Now I can put a chanList into either an ul or ol, depending on what matters
+to me.
+
+chanStats = React.createClass(
+    mixins: [chanListItems]
+    render: ->
+        (ol ->)
+)
+chanList = React.createClass(
+    mixins: [chanListItems]
+    render: ->
+        (ul ->)
+)
+
+But that also seems like a lot of work! Maybe?
