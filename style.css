@@ -62,6 +62,8 @@ table.gameBoard {
 }
 .gameBoard td {
     padding: 0;
+}
+.gameBoard td img {
     border: 1px solid #dcdcdc;
 }
 .gameBoard td:last-child {
