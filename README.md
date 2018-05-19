@@ -4,21 +4,24 @@ Code for a Minesweeper clone, *Fladdermusröj*.
 
 # Motivation
 
-The point of this repo is to experiment with web front end technology.
-But what does it mean to "experiment"? Composability is the most
-important aspect of any architecture, so I am testing to what degree
-these techs support, enable, and champion composable interaction design.
-The goal for each demo is to implement a clone of Minesweeper. For
-in-joke reasons, the clones are called Fladdermusröj.
+The point of this repo is to experiment with web front end technology. But what
+does it mean to "experiment"? Composability is the most important aspect of any
+architecture, so I am testing to what degree these techs support, enable, and
+champion composable interaction design.
 
 I assert that a composable element composes on three axes: generation of
 user interface, reception of program inputs, and transmission of program
-outputs. This three-way composition is easily modeled as
+outputs. This three-way composition can be modeled as
 
-        Monad ui => ProgramInputs -> ui ProgramOutputs.
+        Monad ui => ComponentInputs -> ui ComponentOutputs.
 
-This allows expressive, monadic composition of the UI, while plain old
-functions handle programmatic inputs and outputs with their usual verve.
+This model allows expressive, monadic composition of the UI, while plain old
+functions handle programmatic inputs and outputs with their usual verve. I'm not
+sure it'll work out yet, however: Filling in the details and constraints on the
+types is a work in progress. Nonetheless, I can use this to start describing
+the components in the app.
+
+# Fladdermus components
 
 What components exist in Fladdermusröj? I apologize in advance for the
 illegibility of this table, but it does give the overview:
@@ -109,6 +112,8 @@ in Markdown. I'll have to go all HTML eventually.)
 
 The live app was written in Angular v1, many moons ago. It was very gratifying
 to write software that *friends of mine* actually used, but it's a dead end for
-future research. Now I am looking at two GHCJS tools: Reflex-Dom and Miso. I am
-interested to what degree I can specify the application independently of those
-libraries, as well as what their specific implementations will look like.
+future research. Now I am looking at two GHCJS tools:
+[Reflex-Dom](https://github.com/reflex-frp/reflex-dom) and
+[Miso](https://haskell-miso.org/). I am interested to what degree I can specify
+the application independently of those libraries, as well as what their specific
+implementations will look like.
