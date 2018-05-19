@@ -6,6 +6,10 @@ body {
     padding: 0;
     margin: 0;
     background: #fafafa;
+    
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ . . . */
 }
 h1, h2 {
     margin-top: 0;
